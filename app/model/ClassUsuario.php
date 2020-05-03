@@ -11,19 +11,36 @@ class ClassUsuario extends ClassConexao{
     private $funcionario_id;
 
     # Método para adicionar usuario no banco de dados
-    public function addUsuario($login,$senha,$ativo,$nivelacesso_id,$funcionario_id){
-        $this->usuario_id=0;
-        $this->senha=md5($senha);
+    public function addUsuario($login,$senha,$nivelacesso_id,$cpf){
+        # Recuperando id do funcionario
+        $BFetch1=$this->conexaoDB()->prepare("select * from funcionarios where cpf=:cpf");
+        $BFetch1->bindParam(":cpf", $cpf, \PDO::PARAM_STR);
+        $BFetch1->execute();
+        $this->funcionario_id=$BFetch1->fetch( \PDO::FETCH_ASSOC );
+        $funcId = $this->funcionario_id['funcionario_id'];
 
-        $this->db=$this->conexaoDB()->prepare("INSERT INTO usuarios VALUES (:usuario_id, :login, :senha, :ativo, :nivelacesso_id, :funcionario_id)");
-        $this->db->bindParam(":usuario_id", $usuario_id, \PDO::PARAM_INT);
-        $this->db->bindParam(":login", $login, \PDO::PARAM_STR);
-        $this->db->bindParam(":senha", $senha, \PDO::PARAM_STR);
-        $this->db->bindParam(":ativo", $ativo, \PDO::PARAM_BOOL);
-        $this->db->bindParam(":nivelacesso_id", $nivelacesso_id, \PDO::PARAM_INT);
-        $this->db->bindParam(":funcionario_id", $funcionario_id, \PDO::PARAM_INT);
 
-        $this->db->execute();
+
+        # -------------------------- #
+        $usuario_id=0;
+        $senha=md5($senha);
+        $ativo=1;
+
+        $BFetch=$this->conexaoDB()->prepare("insert into usuarios values (:usuario_id,:login,:senha,:ativo,:nivelacesso_id,:funcionario_id)");
+        $BFetch->bindParam(":usuario_id", $usuario_id, \PDO::PARAM_INT);
+        $BFetch->bindParam(":login", $login, \PDO::PARAM_STR);
+        $BFetch->bindParam(":senha", $senha, \PDO::PARAM_STR);
+        $BFetch->bindParam(":ativo", $ativo, \PDO::PARAM_INT);
+        $BFetch->bindParam(":nivelacesso_id", $nivelacesso_id, \PDO::PARAM_INT);
+        $BFetch->bindParam(":funcionario_id", $funcId, \PDO::PARAM_INT);
+
+        echo "<br>idFuncionario:". $funcId;
+        echo "<br>Login:" . $login;
+        echo "<br>Senha:" . $senha;
+        echo "<br>NivelAcesso:" . $nivelacesso_id;
+        echo "<br>CPF:" . $cpf;
+        echo "<br>Ativo:" . $ativo;
+        $BFetch->execute();
     }
 }
 

@@ -49,26 +49,25 @@ class ControllerCadastroFuncio extends ClassFuncionario {
         if(isset($_POST['email'])){$this->email=filter_input(INPUT_POST, 'email', FILTER_SANITIZE_SPECIAL_CHARS);}
         if(isset($_POST['endereco'])){$this->endereco=filter_input(INPUT_POST, 'endereco', FILTER_SANITIZE_SPECIAL_CHARS);}
         if(isset($_POST['funcao_id'])){$this->funcao_id=filter_input(INPUT_POST, 'funcao_id', FILTER_SANITIZE_SPECIAL_CHARS);}
-        if(isset($_POST['ativo'])){$this->ativo=filter_input(INPUT_POST, 'ativo', FILTER_SANITIZE_SPECIAL_CHARS);}
+        #if(isset($_POST['ativo'])){$this->ativo=filter_input(INPUT_POST, 'ativo', FILTER_SANITIZE_SPECIAL_CHARS);}
     }
 
     # Método para adicionar funcionarios
     public function addFuncionario(){
         $this->recebeVariaveis();
 
-        #$validar=$this->verificarCadastro($this->usuario);
-        #if($validar == true){ # Quer dizer que o cadastro já existe
-            #$_SESSION['usuario_existe']=true;
-        #}else{
+        $validar=$this->verificarCadastro($this->usuario);
+        if($validar == true){ # Quer dizer que o cadastro já existe
+            $_SESSION['usuario_existe']=true;
+        }else{
             $this->salvarFuncionario($this->nome,$this->cpf,$this->rg,$this->celular,$this->email,$this->endereco, $this->funcao_id);
             $this->usuario = new ClassUsuario();
-            $this->usuario->addUsuario($this->login,$this->senha,$this->ativo,$this->nivelacesso_id,$_SESSION['funcionario']);
-            unset($_SESSION['funcionario']);
+            $this->usuario->addUsuario($this->login,$this->senha,$this->nivelacesso_id,$this->cpf);
             $_SESSION['status_cadastro']=true;
 
-        #}
-        #header('Location: ' . DIRPAGE . 'cadastro_funcio');
-        #exit();
+        }
+        header('Location: ' . DIRPAGE . 'cadastro_funcio');
+        exit();
     }
     # Método para listar funcionarios
     public function listar_funcionarios(){
