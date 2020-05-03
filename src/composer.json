@@ -1,0 +1,20 @@
+{
+    "name": "monicao/mvc",
+    "description": "odontoMonicao",
+    "authors": [
+        {
+            "name": "OdontoMonicao",
+            "email": "vinicius-bernado2011@hotmail.com"
+        }
+    ],
+    "require": {
+        "phpmailer/phpmailer": "^6.1",
+      "ext-pdo": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "../app/",
+            "Src\\": "../src/"
+        }
+    }
+}
