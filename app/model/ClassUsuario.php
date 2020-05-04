@@ -12,16 +12,14 @@ class ClassUsuario extends ClassConexao{
 
     # Método para adicionar usuario no banco de dados
     public function addUsuario($login,$senha,$nivelacesso_id,$cpf){
-        # Recuperando id do funcionario
+        # ---------------- Recuperando id do funcionario ---------------- #
         $BFetch1=$this->conexaoDB()->prepare("select * from funcionarios where cpf=:cpf");
         $BFetch1->bindParam(":cpf", $cpf, \PDO::PARAM_STR);
         $BFetch1->execute();
         $this->funcionario_id=$BFetch1->fetch( \PDO::FETCH_ASSOC );
         $funcId = $this->funcionario_id['funcionario_id'];
 
-
-
-        # -------------------------- #
+        # -------------- ADICIONANDO USUARIO ------------ #
         $usuario_id=0;
         $senha=md5($senha);
         $ativo=1;
