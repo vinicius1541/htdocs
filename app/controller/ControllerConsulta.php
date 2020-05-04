@@ -2,7 +2,7 @@
 namespace App\Controller;
 use Src\Classes\ClassRender;
 use Src\Interfaces\InterfaceView;
-class ControllerHome extends ClassRender implements InterfaceView{
+class ControllerConsulta extends ClassRender implements InterfaceView{
     public function __construct(){
         if(isset($_SESSION['logado'])){
             $this->setTitle("Consultório OdontoMonicao");
