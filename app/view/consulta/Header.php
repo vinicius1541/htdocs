@@ -27,7 +27,7 @@ ob_start();
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <a class="dropdown-item" href="<?php echo DIRPAGE . 'cadastro_funcio';?>">Funcionário(usuário)</a>
-                        <a class="dropdown-item" href="#<?php #echo DIRPAGE . 'listar_funcio';?>">Listar Funcionários</a>
+                        <a class="dropdown-item" href="<?php echo DIRPAGE . 'listar_funcio';?>">Listar Funcionários</a>
                     </div>
                 </li>
 

@@ -63,6 +63,7 @@ class ControllerCadastroFuncio extends ClassFuncionario {
             $this->salvarFuncionario($this->nome,$this->cpf,$this->rg,$this->celular,$this->email,$this->endereco, $this->funcao_id);
             $this->usuario = new ClassUsuario();
             $this->usuario->addUsuario($this->login,$this->senha,$this->nivelacesso_id,$this->cpf);
+            #$this->CPF serve para recuperar o id do funcionario na hora de inserir um usuario
             $_SESSION['status_cadastro']=true;
 
         }
