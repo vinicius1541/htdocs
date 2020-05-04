@@ -7,9 +7,10 @@ class ClassFuncionario extends ClassConexao{
     use \Src\Traits\TraitUrlParser;
 
     # Método que irá verificar se o cadastro já existe
-    protected function verificarCadastro($usuario){
-        $BFetch=$this->db=$this->conexaoDB()->prepare("SELECT COUNT(*) total FROM usuarios WHERE usuario=:usuario");
-        $BFetch->bindParam(":usuario", $usuario, \PDO::PARAM_STR);
+    protected function verificarCadastro($login){
+
+        $BFetch=$this->conexaoDB()->prepare("SELECT login FROM usuarios WHERE login=:login");
+        $BFetch->bindParam(":login", $login, \PDO::PARAM_STR);
         $BFetch->execute();
         if($row = $BFetch->rowCount()>0){ # Se usuário existir, retorna TRUE
             return true;
@@ -31,7 +32,6 @@ class ClassFuncionario extends ClassConexao{
         $BFetch->bindParam(":endereco", $endereco, \PDO::PARAM_STR);
         $BFetch->bindParam(":funcao_id", $funcao_id, \PDO::PARAM_INT);
         $BFetch->bindParam(":ativo", $ativo, \PDO::PARAM_INT);
-        echo $ativo. "<br>";
         $BFetch->execute();
     }
     # Listar Funcionários
@@ -42,9 +42,86 @@ class ClassFuncionario extends ClassConexao{
         $BFetch->execute();
         $i=0;
         while ($fetch=$BFetch->fetch(\PDO::FETCH_ASSOC)){
-            $array[$i]=['funcionario_id'=>$fetch['funcionario_id'],'nome'=>$fetch['nome'],'login'=>$fetch['login'], 'dtEntrada'=>$fetch['dtEntrada'], 'celular'=>$fetch['celular'], 'endereco'=>$fetch['endereco'],'ativo'=>$fetch['ativo'], 'nivelacesso_id'=>$fetch['nivelacesso_id']];
+            $array[$i]=[
+                'funcionario_id'=>$fetch['funcionario_id'],
+                'nome'=>$fetch['nome'],
+                'login'=>$fetch['login'],
+                'senha'=>$fetch['senha'],
+                'cpf'=>$fetch['cpf'],
+                'rg'=>$fetch['rg'],
+                'celular'=>$fetch['celular'],
+                'email'=>$fetch['email'],
+                'endereco'=>$fetch['endereco'],
+                'funcao_id'=>$fetch['funcao_id'],
+                'ativo'=>$fetch['ativo'],
+                'nivelacesso_id'=>$fetch['nivelacesso_id'],
+                'dtEntrada'=>$fetch['dtEntrada']
+            ];
             $i++;
         }
         return $array;
+    }
+    # Editar Funcionário
+    protected function procurarFuncionario($funcionario_id){
+        $BFetch=$this->db=$this->conexaoDB()->prepare("SELECT * FROM funcionarios f INNER JOIN usuarios u ON u.funcionario_id = f.funcionario_id AND f.funcionario_id=:funcionario_id");
+        $BFetch->bindParam(":funcionario_id", $funcionario_id, \PDO::PARAM_INT);
+        $BFetch->rowCount();
+        $BFetch->execute();
+        $i=0;
+        while ($fetch=$BFetch->fetch(\PDO::FETCH_ASSOC)){
+            $array[$i]=[
+                'funcionario_id'=>$fetch['funcionario_id'],
+                'nome'=>$fetch['nome'],
+                'login'=>$fetch['login'],
+                'cpf'=>$fetch['cpf'],
+                'rg'=>$fetch['rg'],
+                'celular'=>$fetch['celular'],
+                'email'=>$fetch['email'],
+                'endereco'=>$fetch['endereco'],
+                'funcao_id'=>$fetch['funcao_id'],
+                'ativo'=>$fetch['ativo'],
+                'nivelacesso_id'=>$fetch['nivelacesso_id']
+            ];
+            $i++;
+        }
+        return $array;
+    }
+    protected function editarFuncionario($funcionario_id,$nome,$cpf,$rg,$celular,$email,$endereco,$funcao_id, $nivelacesso_id){
+        if($nivelacesso_id == 3):
+            $ativo = 0;
+            $dtSaida=date('Y-m-d');
+        else:
+            $dtSaida=null;
+            $ativo = 1;
+        endif;
+        $BFetch=$this->conexaoDB()->prepare("UPDATE funcionarios SET nome=:nome, cpf=:cpf, rg=:rg, celular=:celular,email=:email, endereco=:endereco, funcao_id=:funcao_id, ativo=:ativo, dtSaida=:dtSaida WHERE funcionario_id=:funcionario_id");
+        $BFetch->bindParam(":funcionario_id", $funcionario_id, \PDO::PARAM_INT);
+        $BFetch->bindParam(":nome", $nome, \PDO::PARAM_STR);
+        $BFetch->bindParam(":cpf", $cpf, \PDO::PARAM_STR);
+        $BFetch->bindParam(":rg", $rg, \PDO::PARAM_STR);
+        $BFetch->bindParam(":celular", $celular, \PDO::PARAM_STR);
+        $BFetch->bindParam(":email", $email, \PDO::PARAM_STR);
+        $BFetch->bindParam(":endereco", $endereco, \PDO::PARAM_STR);
+        $BFetch->bindParam(":funcao_id", $funcao_id, \PDO::PARAM_INT);
+        $BFetch->bindParam(":ativo", $ativo, \PDO::PARAM_INT);
+        $BFetch->bindParam(":dtSaida", $dtSaida);
+
+        /*echo "id: ". $funcionario_id . "<br>";
+        echo "nome: ". $nome . "<br>";
+        echo "cpf: ". $cpf . "<br>";
+        echo "rg: ". $rg . "<br>";
+        echo "celular: ". $celular . "<br>";
+        echo "email: ". $email . "<br>";
+        echo "endereco: ". $endereco . "<br>";
+        echo "funcaoid: ". $funcao_id . "<br>";
+        echo "nivelacessoid: ". $nivelacesso_id . "<br>";
+        echo "ativo: ". $ativo . "<br>";*/
+        $BFetch->execute();
+
+        if($BFetch):
+            return true;
+        else:
+            return false;
+        endif;
     }
 }
