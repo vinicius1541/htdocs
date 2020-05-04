@@ -32,17 +32,8 @@ class ClassFuncionario extends ClassConexao{
         $BFetch->bindParam(":endereco", $endereco, \PDO::PARAM_STR);
         $BFetch->bindParam(":funcao_id", $funcao_id, \PDO::PARAM_INT);
         $BFetch->bindParam(":ativo", $ativo, \PDO::PARAM_INT);
-        echo $nome. "<br>";
-        echo $cpf. "<br>";
-        echo $rg. "<br>";
-        echo $celular. "<br>";
-        echo $email. "<br>";
-        echo $endereco. "<br>";
-        var_dump($funcao_id);
-        echo "<br>";
         echo $ativo. "<br>";
         $BFetch->execute();
-        var_dump($BFetch);
     }
 
 }

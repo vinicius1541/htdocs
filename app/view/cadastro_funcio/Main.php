@@ -84,7 +84,7 @@
                         <div class="form-group ">
                             <div class="form-label-group">
                                 <select name="nivelacesso_id" id="inputNvlAcesso" class="form-control">
-                                    <option value="0" selected>Acesso NEGADO</option>
+                                    <option value="3" selected>Acesso NEGADO</option>
                                     <option value="1">Funcionario</option>
                                     <option value="2">Dentista/Admin</option>
                                 </select>
