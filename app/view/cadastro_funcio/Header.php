@@ -34,7 +34,7 @@ ob_start();
             <?php endif; ?>
 
             <li class="nav-item">
-                <a class="nav-link" href="#">Consultas</a>
+                <a class="nav-link" href="<?php echo DIRPAGE . 'consulta';?>">Consultas</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Estoque</a>
