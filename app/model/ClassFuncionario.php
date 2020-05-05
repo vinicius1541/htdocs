@@ -7,9 +7,13 @@ class ClassFuncionario extends ClassConexao{
     use \Src\Traits\TraitUrlParser;
 
     # Método que irá verificar se o cadastro já existe
-    protected function verificarCadastro($login){
-
-        $BFetch=$this->conexaoDB()->prepare("SELECT login FROM usuarios WHERE login=:login");
+    protected function verificarCadastro($login, $funcionario_id){
+        if(empty($funcionario_id)):
+            $BFetch=$this->conexaoDB()->prepare("SELECT login FROM usuarios WHERE login=:login");
+        else:
+            $BFetch=$this->conexaoDB()->prepare("SELECT login FROM usuarios WHERE login=:login AND funcionario_id!=:funcionario_id");
+            $BFetch->bindParam(":funcionario_id", $funcionario_id, \PDO::PARAM_INT);
+        endif;
         $BFetch->bindParam(":login", $login, \PDO::PARAM_STR);
         $BFetch->execute();
         if($row = $BFetch->rowCount()>0){ # Se usuário existir, retorna TRUE
@@ -17,11 +21,16 @@ class ClassFuncionario extends ClassConexao{
         }else{
             return false;
         }
+
     }
     # Método para salvar cadastro do funcionário com acesso ao bd
-    protected function salvarFuncionario($nome,$cpf,$rg,$celular,$email,$endereco,$funcao_id){
+    protected function salvarFuncionario($nome,$cpf,$rg,$celular,$email,$endereco,$funcao_id, $nivelacesso_id){
         $funcionario_id=0;
-        $ativo=1;
+        if($nivelacesso_id == 3):
+            $ativo = 0;
+        else:
+            $ativo = 1;
+        endif;
         $BFetch=$this->conexaoDB()->prepare("insert into funcionarios values (:funcionario_id, :nome, :cpf,:rg,:celular,:email,:endereco,:funcao_id,:ativo, now(), null )");
         $BFetch->bindParam(":funcionario_id", $funcionario_id, \PDO::PARAM_INT);
         $BFetch->bindParam(":nome", $nome, \PDO::PARAM_STR);
@@ -116,9 +125,17 @@ class ClassFuncionario extends ClassConexao{
         echo "funcaoid: ". $funcao_id . "<br>";
         echo "nivelacessoid: ". $nivelacesso_id . "<br>";
         echo "ativo: ". $ativo . "<br>";*/
-        $BFetch->execute();
 
-        if($BFetch):
+        if($BFetch->execute()):
+            return true;
+        else:
+            return false;
+        endif;
+    }
+    protected function excluirFuncionario($funcionario_id){
+        $BFetch=$this->conexaoDB()->prepare("DELETE FROM funcionarios WHERE funcionario_id=:funcionario_id");
+        $BFetch->bindParam(":funcionario_id", $funcionario_id, \PDO::PARAM_INT);
+        if($BFetch->execute()):
             return true;
         else:
             return false;

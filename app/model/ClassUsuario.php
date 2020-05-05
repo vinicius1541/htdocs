@@ -62,10 +62,23 @@ class ClassUsuario extends ClassConexao{
         $BFetch->bindParam(":funcionario_id", $funcionario_id, \PDO::PARAM_INT);
         $BFetch->bindParam(":ativo", $ativo, \PDO::PARAM_INT);
         $BFetch->execute();
-        if ($BFetch):
+        if($BFetch->execute()):
             return true;
         else:
             return false;
         endif;
+    }
+    public function excluirUsuario($funcionario_id){
+        try{
+            $BFetch=$this->conexaoDB()->prepare("DELETE FROM usuarios WHERE funcionario_id=:funcionario_id");
+            $BFetch->bindParam(":funcionario_id", $funcionario_id, \PDO::PARAM_INT);
+            if($BFetch->execute()):
+                return true;
+            else:
+                return false;
+            endif;
+        }catch (\Exception $ex){
+            return false;
+        }
     }
 }

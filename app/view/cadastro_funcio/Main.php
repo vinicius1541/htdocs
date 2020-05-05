@@ -94,7 +94,7 @@
                             <div class="form-label-group">
                                 <select name="funcao_id" id="inputFuncao" class="form-control">
                                     <option value="1">Funcionario</option>
-                                    <option value="2">Dentista/Admin</option>
+                                    <option value="2">Dentista</option>
                                 </select>
                             </div>
                         </div><!--
@@ -106,8 +106,19 @@
                             </label>
                         </div>
                     </div>-->
-                        <button type="submit" class="btn btn-primary btn-block">Cadastrar</button>
+
+                        <div class="text-center">
+                            <div class="form-row">
+                                <div class="form-group col-md-7">
+                                    <a href="<?php echo DIRPAGE . 'cadastro_funcio/listar'; ?>"><button id="listarFuncio" type="button" class=" btn btn-warning btn-lg text-uppercase">Listar Funcionários</button></a>
+                                </div>
+                                <div class="form-group col-md-5">
+                                    <button type="submit" class="btn btn-primary btn-block">Cadastrar</button>
+                                </div>
+                            </div>
+                        </div>
                     </form>
+
                 </div>
             </div>
         </div>
