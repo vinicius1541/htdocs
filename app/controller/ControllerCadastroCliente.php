@@ -146,6 +146,7 @@ class ControllerCadastroCliente extends ClassCliente{
 
     # Método que irá abrir a tela de ediçao do cliente solicitado
     public function editando($cliente_id){ # Formulario de ediçao do Funcionário
+        $this->recebeVariaveis();
         $Array = $this->procurarCliente($cliente_id);
         foreach ($Array as $dados) {
             echo "
@@ -262,6 +263,7 @@ class ControllerCadastroCliente extends ClassCliente{
         exit();
     }
     public function confirmar_exclusao($cliente_id){
+        $this->recebeVariaveis();
         echo "
         <link href='" . DIRCSS . 'bootstrap.min.css' . "' rel='stylesheet'/>
         <link href='" . DIRCSS . 'style.css' . "' rel='stylesheet'/>
@@ -293,6 +295,7 @@ class ControllerCadastroCliente extends ClassCliente{
         </body>";
     }
     public function excluir($cliente_id){
+        $this->recebeVariaveis();
         $F = $this->excluirCliente($cliente_id);
         if($F):
             $_SESSION['sucesso'] = true;

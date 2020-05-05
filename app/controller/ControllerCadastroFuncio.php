@@ -334,6 +334,7 @@ class ControllerCadastroFuncio extends ClassFuncionario
     }
 
     public function confirmar_exclusao($funcionario_id){
+        $this->recebeVariaveis();
         echo "
         <link href='" . DIRCSS . 'bootstrap.min.css' . "' rel='stylesheet'/>
         <link href='" . DIRCSS . 'style.css' . "' rel='stylesheet'/>
