@@ -19,7 +19,7 @@ class ClassRoutes{
         $this->rota=array(
             ""=>$rotaLogado,
             "home"=>"ControllerHome",
-            "cadastrar_cliente"=>"ControllerCadastroCliente",
+            "cadastro_cliente"=>"ControllerCadastroCliente",
             "cadastro_funcio"=>"ControllerCadastroFuncio",
             "login"=>"ControllerLogin",
             "consulta"=>"ControllerConsulta",

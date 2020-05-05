@@ -21,7 +21,6 @@ class ClassFuncionario extends ClassConexao{
         }else{
             return false;
         }
-
     }
     # Método para salvar cadastro do funcionário com acesso ao bd
     protected function salvarFuncionario($nome,$cpf,$rg,$celular,$email,$endereco,$funcao_id, $nivelacesso_id){

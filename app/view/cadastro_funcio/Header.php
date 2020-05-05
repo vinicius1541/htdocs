@@ -23,11 +23,20 @@ ob_start();
             <?php if ($_SESSION['nivelacesso'] == 1) : ?>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Cadastrar
+                        Gerenciar funcionários
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="<?php echo DIRPAGE . 'cadastro_funcio';?>">Funcionário(usuário)</a>
-                        <a class="dropdown-item" href="<?php echo DIRPAGE . 'cadastro_funcio/listar';?>">Listar Funcionários</a>
+                        <a class="dropdown-item" href="<?php echo DIRPAGE . 'cadastro_funcio';?>">Adicionar funcionário</a>
+                        <a class="dropdown-item" href="<?php echo DIRPAGE . 'cadastro_funcio/listar';?>">Listar funcionários</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Gerenciar clientes
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="<?php echo DIRPAGE . 'cadastro_cliente';?>">Adicionar cliente</a>
+                        <a class="dropdown-item" href="<?php echo DIRPAGE . 'cadastro_cliente/listar';?>">Listar clientes</a>
                     </div>
                 </li>
 
@@ -75,7 +84,12 @@ ob_start();
                                 echo "Funcionário";
                             }
                             ?></a>
-                        <a class="dropdown-item" href="#">Editar perfil</a>
+                        <?php
+                            if($_SESSION['nivelacesso'] == 1):?>
+                                <a class="dropdown-item" href="<?php echo DIRPAGE . 'cadastro_funcio/editando/' . $_SESSION['funcionario_id'];?>">Editar perfil</a>
+                        <?php
+                            endif;
+                        ?>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="<?php echo DIRPAGE . 'login/logout';?>">Logout</a>
                     </div>

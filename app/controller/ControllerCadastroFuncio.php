@@ -25,8 +25,7 @@ class ControllerCadastroFuncio extends ClassFuncionario
     protected $dtEntrada;
     protected $dtSaida;
 
-    public function __construct()
-    {
+    public function __construct(){
         if (count($this->parseUrl()) == 1) {
             $render = new ClassRender();
             if (isset($_SESSION['logado'])) {
@@ -45,8 +44,7 @@ class ControllerCadastroFuncio extends ClassFuncionario
         }
     }
 
-    public function recebeVariaveis()
-    {
+    public function recebeVariaveis(){
         if ($_SESSION['nivelacesso'] >= 2):
             header('Location: ' . DIRPAGE . 'home');
             exit();
@@ -67,8 +65,7 @@ class ControllerCadastroFuncio extends ClassFuncionario
     }
 
     # Método para adicionar funcionarios
-    public function addFuncionario()
-    {
+    public function addFuncionario(){
         $this->recebeVariaveis();
 
         $validar = $this->verificarCadastro($this->login,$this->funcionario_id);
@@ -80,15 +77,13 @@ class ControllerCadastroFuncio extends ClassFuncionario
             $this->usuario->addUsuario($this->login, $this->senha, $this->nivelacesso_id, $this->cpf);
             #$this->CPF serve para recuperar o id do funcionario na hora de inserir um usuario
             $_SESSION['status_cadastro'] = true;
-
         }
         header('Location: ' . DIRPAGE . 'cadastro_funcio');
         exit();
     }
 
     # Método que irá listar todos os funcionários
-    public function listar()
-    {
+    public function listar(){
         $this->recebeVariaveis();
         $Array = $this->listarFuncionario();
 
@@ -154,11 +149,11 @@ class ControllerCadastroFuncio extends ClassFuncionario
                 </tr>";
         }
         echo "
-
                 </tbody >
             </table>
             <div class='col text-center'>
-                <a href='" . DIRPAGE . 'cadastro_funcio' . "'><button type='button' class='btn btn-warning btn-lg text-uppercase'>Voltar</button></a><br><br><br>
+                <a href='" . DIRPAGE . 'home' . "'><button type='button' class='btn btn-warning btn-lg text-uppercase'>Voltar</button></a>
+                <a href='" . DIRPAGE . 'cadastro_funcio' . "'><button type='button' class='btn btn-primary btn-lg text-uppercase'>Cadastrar</button></a><br>                
             </div>
         </div>
         <script src='" . DIRJS . 'jquery.min.js' . "'></script>
@@ -168,9 +163,8 @@ class ControllerCadastroFuncio extends ClassFuncionario
         ";
     }
 
-    # Método que irá procurar o funcionário solicitado
-    public function editando($funcionario_id)
-    { # Formulario de ediçao do Funcionário
+    # Método que irá abrir a tela de ediçao do funcionário solicitado
+    public function editando($funcionario_id){ # Formulario de ediçao do Funcionário
         $this->recebeVariaveis();
         $Array = $this->procurarFuncionario($funcionario_id);
         foreach ($Array as $dados) {
@@ -199,11 +193,11 @@ class ControllerCadastroFuncio extends ClassFuncionario
             <link href='" . DIRCSS . 'style.css' . "' rel='stylesheet'/>
             <link href='" . DIRCSS . 'bootstrap.css' . "' rel='stylesheet'/>
             
-            <body class='fundoLogado'>
+            <body class='fundo'>
             <div class='container'>
                 <div class='row'>
                     <div class='col-sm-auto col-md-auto col-lg-auto mx-auto'>
-                        <div class='card card-signin my-5'>
+                        <div class='fundoLogado card card-signin my-5'>
                             <div class='card-body'>";
             if (isset($_SESSION['sucesso'])) :
                 echo "
@@ -312,8 +306,7 @@ class ControllerCadastroFuncio extends ClassFuncionario
         }
     }
 
-    public function editar()
-    {
+    public function editar(){
         $this->recebeVariaveis();
         $validar = $this->verificarCadastro($this->login, $this->funcionario_id);
         if ($validar == true) { # Quer dizer que o cadastro já existe

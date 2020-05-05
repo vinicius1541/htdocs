@@ -1,14 +1,7 @@
-<?php
-#if ($_SESSION['nivelacesso'] != 2) {
-    #header('Location: logged.php');
-    #exit;
-#}
-?>
-
 <div class="container">
     <div class="row">
         <div class="col-sm-auto col-md-auto col-lg-auto mx-auto">
-            <div class="card card-signin my-5">
+            <div class="fundoLogado card card-signin my-5">
                 <div class="card-body">
                     <?php
                     if (isset($_SESSION['status_cadastro'])) :
@@ -110,15 +103,14 @@
                         <div class="text-center">
                             <div class="form-row">
                                 <div class="form-group col-md-7">
-                                    <a href="<?php echo DIRPAGE . 'cadastro_funcio/listar'; ?>"><button id="listarFuncio" type="button" class=" btn btn-warning btn-lg text-uppercase">Listar Funcionários</button></a>
+                                    <a href="<?php echo DIRPAGE . 'cadastro_funcio/listar'; ?>"><button id="listarFuncio" type="button" class="my-btn btn btn-warning btn-lg text-uppercase">Listar Funcionários</button></a>
                                 </div>
                                 <div class="form-group col-md-5">
-                                    <button type="submit" class="btn btn-primary btn-block">Cadastrar</button>
+                                    <button type="submit" class="btn btn-primary btn-block btn-lg text-uppercase">Cadastrar</button>
                                 </div>
                             </div>
                         </div>
                     </form>
-
                 </div>
             </div>
         </div>
