@@ -1,15 +1,27 @@
 <?php
+
 namespace App\Model;
 
-abstract class ClassConexao{
+use Exception;
+
+abstract class ClassConexao
+{
     # Realiza a conexao com o banco de dados
-    public function conexaoDB(){
+    public function conexaoDB()
+    {
         try {
-            $con = new \PDO("mysql:host=". HOST.";dbname=" . DB . "","".USER."","".PASS."");
-            return $con;
-        }catch (\PDOException $error){
+            try{
+                $con = new \PDO("mysql:host=" . HOST . ";dbname=" . DB . "", "" . USER . "", "" . PASS . "");
+                return $con;
+            } catch (Exception $ex){
+                $con = new \PDO("mysql:host=" . HOST . ";dbname=" . DB . "", "" . USER . "", "");
+                return $con;
+            }
+           
+            
+            
+        } catch (\PDOException $error) {
             return $error->getMessage();
         }
     }
-
 }

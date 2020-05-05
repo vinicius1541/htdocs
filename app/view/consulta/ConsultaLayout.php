@@ -6,7 +6,7 @@
 </head>
 
 <body class="fundo">
-    <!--<a href="<?php echo DIRPAGE . 'cadastrar_cliente'; ?>">Cadastrar Clientes</a>-->
+    
 
 
     <div class="header">
