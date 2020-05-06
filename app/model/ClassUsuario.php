@@ -45,6 +45,9 @@ class ClassUsuario extends ClassConexao{
     }
     public function editarUsuario($login,$senha,$nivelacesso_id,$cpf){
         $funcionario_id = $this->recFuncioId($cpf);
+        if($nivelacesso_id >=2){
+            $_SESSION['nivelacesso'] = $nivelacesso_id;
+        }
         if($nivelacesso_id == 3):
             $ativo = 0;
         else:

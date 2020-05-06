@@ -15,8 +15,7 @@ class ControllerCadastroCliente extends ClassCliente{
     protected $endereco;
     use \Src\Traits\TraitUrlParser;
 
-    public function __construct()
-    {
+    public function __construct(){
         if (count($this->parseUrl()) == 1) {
             $render = new ClassRender();
             if (isset($_SESSION['logado'])) {

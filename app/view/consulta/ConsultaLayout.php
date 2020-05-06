@@ -6,8 +6,6 @@
 </head>
 
 <body class="fundo">
-    
-
 
     <div class="header">
         <?php echo $this->addHeader(); ?>
