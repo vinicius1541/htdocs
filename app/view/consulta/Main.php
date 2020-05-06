@@ -1,1 +1,4 @@
-<?echo "teste";
+<?php
+
+include 'Calendar.php';
+?>

@@ -325,3 +325,51 @@
       color: #777;
     }
   }
+
+
+  /*####### calendar #######*/
+table{
+  text-align: center;
+  table-layout: auto;
+  width: fit-content !important;
+
+}
+
+table td{
+  height: 75px !important;
+}
+
+.tab_btn{
+  background-color: white;
+  color: black;
+  border: white !important;
+}
+
+.diatabela{
+  font-size: small;
+  text-align: left;
+  height: 55px;
+  width: 55px !important;
+}
+
+.today{
+  background: orange;
+}
+
+td:nth-of-type(1), td:nth-of-type(7) {
+  color:salmon;
+}
+
+th:nth-of-type(1), th:nth-of-type(7) {
+  color:red;
+}
+
+h3{
+  text-align: center;
+}
+
+h3 a:hover{
+  background-color: skyblue;
+  text-decoration: none;
+}
+

@@ -1,7 +1,16 @@
 <?php
+
+
+namespace App\Model;
+namespace App\Model;
+
 use App\Model\ClassFuncionario;
 use App\Model\ClassCliente;
-class Consultas{
+use App\Model\ClassConexao;
+
+class ClassConsulta extends ClassConexao{
+    private $db;
+    use \Src\Traits\TraitUrlParser;
 
     # Atributos
     private $consulta_id;
@@ -18,70 +27,110 @@ class Consultas{
     private $funcao_id;
     # $this->funcionario_id=$this->getFuncionarioId();
     # Métodos getters e setters
-    public function setDtConsulta($dtConsulta){
+    public function setDtConsulta($dtConsulta)
+    {
         $this->dtConsulta = $dtConsulta;
 
     }
-    public function getDtConsulta(){
+
+    public function getDtConsulta()
+    {
         return $this->dtConsulta;
     }
-    public function setHrConsulta($hrConsulta){
+
+    public function setHrConsulta($hrConsulta)
+    {
         $this->hrConsulta = $hrConsulta;
     }
-    public function getHrConsulta(){
+
+    public function getHrConsulta()
+    {
         return $this->hrConsulta;
     }
-    public function setCusto($custo){
+
+    public function setCusto($custo)
+    {
         $this->custo = $custo;
     }
-    public function getCusto(){
+
+    public function getCusto()
+    {
         return $this->custo;
     }
-    public function setDesconto($desconto){
+
+    public function setDesconto($desconto)
+    {
         $this->desconto = $desconto;
     }
-    public function getDesconto(){
+
+    public function getDesconto()
+    {
         return $this->desconto;
     }
-    public function setDtAbertura($dtAbertura){
+
+    public function setDtAbertura($dtAbertura)
+    {
         $this->dtAbertura = $dtAbertura;
     }
-    public function getDtAbertura(){
+
+    public function getDtAbertura()
+    {
         return $this->dtAbertura;
     }
-    public function setDtEncerr($dtEncerr){
+
+    public function setDtEncerr($dtEncerr)
+    {
         $this->dtEncerr = $dtEncerr;
     }
-    public function getDtEncerr(){
+
+    public function getDtEncerr()
+    {
         return $this->dtEncerr;
     }
-    public function setSolucao($solucao){
+
+    public function setSolucao($solucao)
+    {
         $this->solucao = $solucao;
     }
-    public function getSolucao(){
+
+    public function getSolucao()
+    {
         return $this->solucao;
     }
-    public function setSituacao($situacao){
+
+    public function setSituacao($situacao)
+    {
         $this->situacao = $situacao;
     }
-    public function getSituacao(){
+
+    public function getSituacao()
+    {
         return $this->situacao;
     }
-    public function setClienteId(ClassCliente $cliente_id){
+
+    public function setClienteId(ClassCliente $cliente_id)
+    {
         $this->cliente_id = $cliente_id->getClienteId();
     }
-    public function getClienteId(){
+
+    public function getClienteId()
+    {
         return $this->cliente_id;
     }
-    public function setFuncionarioId(ClassFuncionario $funcionario_id){
+
+    public function setFuncionarioId(ClassFuncionario $funcionario_id)
+    {
         $this->funcionario_id = $funcionario_id->getFuncionarioId();
     }
-    public function getFuncionarioId(){
+
+    public function getFuncionarioId()
+    {
         $this->funcionario_id;
     }
 
     # Métodos para abrir, cancelar, visualizar, editar e encerrar consultas
-    public function abrirConsultas($dtConsulta, $hrConsulta, $custo, $desconto, $dtAbertura, $dtEncerr, $solucao, $situacao, ClassCliente $cliente_id, ClassFuncionario $funcionario_id, $funcao_id){
+    public function abrirConsultas($dtConsulta, $hrConsulta, $custo, $desconto, $dtAbertura, $dtEncerr, $solucao, $situacao, ClassCliente $cliente_id, ClassFuncionario $funcionario_id, $funcao_id)
+    {
         $this->dtConsulta = $dtConsulta;
         $this->hrConsulta = $hrConsulta;
         $this->custo = $custo;
@@ -94,18 +143,25 @@ class Consultas{
         $this->funcionario_id = $funcionario_id->getFuncionarioId();
         $this->funcao_id = $funcao_id;
     }
-    public function cancelarConsulta($consulta_id){
+
+    public function cancelarConsulta($consulta_id)
+    {
 
     }
-    public function verConsultas($consulta_id){
+
+    public function verConsultas($consulta_id)
+    {
 
     }
-    public function editarConsulta($consulta_id){
+
+    public function editarConsulta($consulta_id)
+    {
 
     }
-    public function encerrarConsulta($consulta_id){
+
+    public function encerrarConsulta($consulta_id)
+    {
 
     }
+
 }
-
-?>
