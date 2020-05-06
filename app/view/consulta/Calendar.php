@@ -42,16 +42,16 @@ $weeks = array(); //determina o tipo da variável
 $week = ''; //inicia elemento vazio                     | não sei pq assim esses dois mas foi o que consegui.
 
 // Adiciona semanas
-$week .= str_repeat('<td></td>', $str); //adiciona uma linha de semana
+$week .= str_repeat('<td></td>', $str); //adiciona célula em branco até começar a semana
 
 for ($day = 1; $day <= $day_count; $day++, $str++) {  // adiciona datas com formato ano-mes-dia
 
     $date = $ym . '-' . $day;
 
     if ($today == $date) {  //verifica se é o dia atual e se for, marca em amarelo
-        $week .= '<td class="today">' . $day;
+        $week .= '<td class="today"><h6 class="diatabela">' . $day .'</h6>';
     } else {
-        $week .= '<td>' . $day;
+        $week .= '<td><h6 class="diatabela">' . $day . '</h6>';
     }
     $week .= '</td>';
 

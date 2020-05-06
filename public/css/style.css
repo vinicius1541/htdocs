@@ -331,11 +331,12 @@
 table{
   text-align: center;
   table-layout: auto;
+  width: fit-content !important;
 
 }
 
 table td{
-  height: 84px !important;
+  height: 75px !important;
 }
 
 .tab_btn{
@@ -345,9 +346,10 @@ table td{
 }
 
 .diatabela{
-  font-size: xx-small;
+  font-size: small;
   text-align: left;
-  height: 60px;
+  height: 55px;
+  width: 55px !important;
 }
 
 .today{
