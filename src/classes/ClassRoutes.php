@@ -19,10 +19,12 @@ class ClassRoutes{
         $this->rota=array(
             ""=>$rotaLogado,
             "home"=>"ControllerHome",
-            "cadastrar_cliente"=>"ControllerCadastroCliente",
+            "cadastro_cliente"=>"ControllerCadastroCliente",
             "cadastro_funcio"=>"ControllerCadastroFuncio",
             "login"=>"ControllerLogin",
+
             "consulta"=>"ControllerConsulta"
+
         );
         if(array_key_exists($indice, $this->rota)) {#se existir o caminho digitado dentro das rotas colocadas no array
             if (file_exists(DIRREQ . "app/controller/{$this->rota[$indice]}.php")){ #se o arquivo do caminho digitado estiver lá

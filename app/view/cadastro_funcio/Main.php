@@ -1,14 +1,7 @@
-<?php
-#if ($_SESSION['nivelacesso'] != 2) {
-    #header('Location: logged.php');
-    #exit;
-#}
-?>
-
 <div class="container">
     <div class="row">
         <div class="col-sm-auto col-md-auto col-lg-auto mx-auto">
-            <div class="card card-signin my-5">
+            <div class="fundoLogado card card-signin my-5">
                 <div class="card-body">
                     <?php
                     if (isset($_SESSION['status_cadastro'])) :
@@ -84,7 +77,7 @@
                         <div class="form-group ">
                             <div class="form-label-group">
                                 <select name="nivelacesso_id" id="inputNvlAcesso" class="form-control">
-                                    <option value="0" selected>Acesso NEGADO</option>
+                                    <option value="3" selected>Acesso NEGADO</option>
                                     <option value="1">Funcionario</option>
                                     <option value="2">Dentista/Admin</option>
                                 </select>
@@ -94,7 +87,7 @@
                             <div class="form-label-group">
                                 <select name="funcao_id" id="inputFuncao" class="form-control">
                                     <option value="1">Funcionario</option>
-                                    <option value="2">Dentista/Admin</option>
+                                    <option value="2">Dentista</option>
                                 </select>
                             </div>
                         </div><!--
@@ -106,7 +99,17 @@
                             </label>
                         </div>
                     </div>-->
-                        <button type="submit" class="btn btn-primary btn-block">Cadastrar</button>
+
+                        <div class="text-center">
+                            <div class="form-row">
+                                <div class="form-group col-md-7">
+                                    <a href="<?php echo DIRPAGE . 'cadastro_funcio/listar'; ?>"><button id="listarFuncio" type="button" class="my-btn btn btn-warning btn-lg text-uppercase">Listar Funcionários</button></a>
+                                </div>
+                                <div class="form-group col-md-5">
+                                    <button type="submit" class="btn btn-primary btn-block btn-lg text-uppercase">Cadastrar</button>
+                                </div>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>

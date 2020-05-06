@@ -53,6 +53,8 @@ class ControllerLogin extends ClassLogin {
     }
     public function logout(){
         unset($_SESSION['logado']);
+        unset($_SESSION['funcionario_id']);
+
         header('Location: ' . DIRPAGE . 'login');
         exit();
     }

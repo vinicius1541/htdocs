@@ -23,6 +23,7 @@ class ControllerConsulta extends ClassRender implements InterfaceView
         } else {
             header('Location: ' . DIRPAGE . 'login');
             exit();
+
         }
     }
 

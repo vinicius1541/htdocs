@@ -26,7 +26,7 @@
                                 <input name="senha" type="password" id="inputPassword" class="form-control" placeholder="Senha" autocomplete="off" required>
                                 <label for="inputPassword">Senha</label>
                             </div>
-                            <button class="my-btn btn btn-lg btn-primary btn-block text-uppercase" type="submit">Autenticar</button>
+                            <button class="btn btn-lg btn-outline-primary btn-block text-uppercase" type="submit">Autenticar</button>
                         </form>
                     </div>
                 </div>

@@ -20,7 +20,9 @@ class ClassRender{
         include_once(DIRREQ . "app/view/Layout.php");
     }
     public function renderLoginPage(){
+
         include_once(DIRREQ . "app/view/login/login.php");
+
     }
     # Método que vai adicionar características específicas no head
     public function addHead(){

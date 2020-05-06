@@ -3,76 +3,124 @@ namespace App\Model;
 use App\Model\ClassConexao;
 
 class ClassCliente extends ClassConexao{
-    //Atributos
-    private $cliente_id;
-    private $cli_nome;
-    private $cli_rg;
-    private $cli_cpf;
-    private $cli_cep;
-    private $endereco;
-    private $celular;
-    private $problema;
-    //Métodos setters e getters.
-    public function getClienteId(){
-        return $this->cliente_id;
+
+    private $db;
+    /*protected $cliente_id;
+    protected $cli_nome;
+    protected $cli_cpf;
+    protected $cli_rg;
+    protected $cli_cep;
+    protected $celular;
+    protected $cli_email;
+    protected $endereco;*/
+
+    # Método que irá verificar se o cadastro do cliente já existe
+    protected function verificarCadastro($cli_cpf, $cli_rg, $cli_email, $cliente_id){
+        if(empty($cliente_id)):
+            $BFetch=$this->conexaoDB()->prepare("SELECT * FROM clientes WHERE (cli_cpf=:cli_cpf OR cli_rg=:cli_rg or cli_email=:cli_email)");
+        else:
+            $BFetch=$this->conexaoDB()->prepare("SELECT * FROM clientes WHERE (cli_cpf=:cli_cpf OR cli_rg=:cli_rg or cli_email=:cli_email) AND cliente_id!=:cliente_id");
+            $BFetch->bindParam(":cliente_id", $cliente_id, \PDO::PARAM_INT);
+        endif;
+
+        $BFetch->bindParam(":cli_cpf", $cli_cpf, \PDO::PARAM_STR);
+        $BFetch->bindParam(":cli_rg", $cli_rg, \PDO::PARAM_STR);
+        $BFetch->bindParam(":cli_email", $cli_email, \PDO::PARAM_STR);
+
+
+        $BFetch->execute();
+        if($row = $BFetch->rowCount()>0): # Se usuário existir, retorna TRUE
+            return true;
+        else:
+            return false;
+        endif;
     }
-    public function setClienteNome($nome_cli){
-        $this->cli_nome = $nome_cli;
+    protected function salvarCliente($cli_nome,$cli_cpf,$cli_rg,$cli_cep,$celular,$cli_email,$endereco){
+        $cliente_id=0;
+
+        $BFetch=$this->conexaoDB()->prepare("INSERT INTO clientes VALUES (:cliente_id, :cli_nome, :cli_cpf,:cli_rg,:cli_cep,:celular,:cli_email,:endereco)");
+        $BFetch->bindParam(":cliente_id", $cliente_id, \PDO::PARAM_INT);
+        $BFetch->bindParam(":cli_nome", $cli_nome, \PDO::PARAM_STR);
+        $BFetch->bindParam(":cli_cpf", $cli_cpf, \PDO::PARAM_STR);
+        $BFetch->bindParam(":cli_rg", $cli_rg, \PDO::PARAM_STR);
+        $BFetch->bindParam(":cli_cep", $cli_cep, \PDO::PARAM_STR);
+        $BFetch->bindParam(":celular", $celular, \PDO::PARAM_STR);
+        $BFetch->bindParam(":cli_email", $cli_email, \PDO::PARAM_STR);
+        $BFetch->bindParam(":endereco", $endereco, \PDO::PARAM_STR);
+
+        if($BFetch->execute()):
+            return true;
+        else:
+            return false;
+        endif;
     }
-    public function getClienteNome(){
-        return $this->cli_nome;
+    protected function listarClientes(){
+        $BFetch=$this->conexaoDB()->prepare("SELECT * FROM clientes");
+        $BFetch->rowCount();
+        $BFetch->execute();
+        $i=0;
+        while ($fetch=$BFetch->fetch(\PDO::FETCH_ASSOC)){
+            $array[$i]=[
+                'cliente_id'=>$fetch['cliente_id'],
+                'cli_nome'=>$fetch['cli_nome'],
+                'cli_cpf'=>$fetch['cli_cpf'],
+                'cli_rg'=>$fetch['cli_rg'],
+                'celular'=>$fetch['celular'],
+                'cli_email'=>$fetch['cli_email'],
+                'endereco'=>$fetch['endereco']
+            ];
+            $i++;
+        }
+        return $array;
     }
-    public function setRG($rg_cli){
-        $this->cli_rg = $rg_cli;
+    protected function procurarCliente($cliente_id){
+
+        $BFetch=$this->conexaoDB()->prepare("SELECT * FROM clientes WHERE cliente_id=:cliente_id");
+        $BFetch->bindParam(":cliente_id", $cliente_id, \PDO::PARAM_INT);
+        $BFetch->rowCount();
+        $BFetch->execute();
+        $i=0;
+        while ($fetch=$BFetch->fetch(\PDO::FETCH_ASSOC)){
+            $array[$i]=[
+                'cliente_id'=>$fetch['cliente_id'],
+                'cli_nome'=>$fetch['cli_nome'],
+                'cli_cpf'=>$fetch['cli_cpf'],
+                'cli_rg'=>$fetch['cli_rg'],
+                'cli_cep'=>$fetch['cli_cep'],
+                'celular'=>$fetch['celular'],
+                'cli_email'=>$fetch['cli_email'],
+                'endereco'=>$fetch['endereco']
+            ];
+            $i++;
+        }
+        return $array;
     }
-    public function getRG(){
-        return $this->cli_rg;
+    protected function editarCliente($cliente_id,$cli_nome,$cli_cpf,$cli_rg,$cli_cep,$celular,$cli_email,$endereco){
+
+        $BFetch=$this->conexaoDB()->prepare("UPDATE clientes SET cli_nome=:cli_nome, cli_cpf=:cli_cpf, cli_rg=:cli_rg,cli_cep=:cli_cep,celular=:celular,cli_email=:cli_email, endereco=:endereco WHERE cliente_id=:cliente_id");
+        $BFetch->bindParam(":cliente_id", $cliente_id, \PDO::PARAM_INT);
+        $BFetch->bindParam(":cli_nome", $cli_nome, \PDO::PARAM_STR);
+        $BFetch->bindParam(":cli_cpf", $cli_cpf, \PDO::PARAM_STR);
+        $BFetch->bindParam(":cli_rg", $cli_rg, \PDO::PARAM_STR);
+        $BFetch->bindParam(":cli_cep", $cli_cep, \PDO::PARAM_STR);
+        $BFetch->bindParam(":celular", $celular, \PDO::PARAM_STR);
+        $BFetch->bindParam(":cli_email", $cli_email, \PDO::PARAM_STR);
+        $BFetch->bindParam(":endereco", $endereco, \PDO::PARAM_STR);
+
+        if($BFetch->execute()):
+            return true;
+        else:
+            return false;
+        endif;
     }
-    public function setCPF($cpf){
-        $this->cli_cpf = $cpf;
-    }
-    public function getCPF(){
-        return $this->cli_cpf;
-    }
-    public function setCEP($cep){
-        $this->cli_cep = $cep;
-    }
-    public function getCEP(){
-        return $this->cli_cep;
-    }
-    public function setEndereco($end){
-        $this->endereco = $end;
-    }
-    public function getEndereco(){
-        return $this->endereco;
-    }
-    public function setCelular($cel){
-        $this->celular = $cel;
-    }
-    public function getCelular(){
-        return $this->celular;
-    }
-    public function setProblema($prob){
-        $this->problema = $prob;
-    }
-    public function getProblema(){
-        return $this->problema;
-    }
-    //Métodos para add, excluir e editar
-    public function addCliente($cli_nome, $cli_rg, $cli_cpf, $cli_cep, $endereco, $celular, $problema){
-        $this->cli_nome = $cli_nome; 
-        $this->cli_rg = $cli_rg;
-        $this->cli_cpf = $cli_cpf;
-        $this->cli_cep = $cli_cep;
-        $this->endereco = $endereco;
-        $this->celular = $celular;
-        $this->problema = $problema;      
-    }
-    public function excluirCliente($cliente_id){
-    }
-    public function listarCliente($cliente_id){
-    }
-    public function editarCliente($cliente_id){
+    protected function excluirCliente($cliente_id){
+        $BFetch=$this->conexaoDB()->prepare("DELETE FROM clientes WHERE cliente_id=:cliente_id");
+        $BFetch->bindParam(":cliente_id", $cliente_id, \PDO::PARAM_INT);
+        if($BFetch->execute()):
+            return true;
+        else:
+            return false;
+        endif;
     }
 }
-?>
+    
