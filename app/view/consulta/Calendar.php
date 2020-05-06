@@ -41,7 +41,7 @@ $str = date('w', mktime(0, 0, 0, date('m', $timestamp), 1, date('Y', $timestamp)
 $weeks = array(); //determina o tipo da variável
 $week = ''; //inicia elemento vazio                     | não sei pq assim esses dois mas foi o que consegui.
 
-// Adiciona semanas
+// Adiciona semanas                |           os <h6> fazem os dias ficarem no canto superior esq
 $week .= str_repeat('<td></td>', $str); //adiciona célula em branco até começar a semana
 
 for ($day = 1; $day <= $day_count; $day++, $str++) {  // adiciona datas com formato ano-mes-dia
