@@ -68,7 +68,7 @@ for ($day = 1; $day <= $day_count; $day++, $str++) {  // adiciona datas com form
         $week = '';
     } 
 } ?>
-<h3><a href="?ym=<?php echo $prev; ?>">&lt;</a> <a href="?ym=<?php echo $today; ?>"><?php echo $calendar; ?></a> <a href="?ym=<?php echo $next; ?>">&gt;</a></h3>
+<h3><a href="?ym=<?php echo $prev; ?>">&lt;</a> <a href="?ym=<?php echo date('M / Y'); ?>"><?php echo $calendar; ?></a> <a href="?ym=<?php echo $next; ?>">&gt;</a></h3>
 <table class="table table-dark table-bordered">
     <tr>
         <th>Dom</th>
