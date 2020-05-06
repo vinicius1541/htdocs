@@ -23,7 +23,7 @@ if ($timestamp === false) {
 $today = date('Y-m-j', time());
 
 // Título do calendário
-$calendar = strtoupper(date('M / y', $timestamp));
+$calendar = strtoupper(date('M / Y', $timestamp));
 
 // Prev & next month link     | strotime('salto', formatação)
 $prev = date('Y-m', strtotime('-1 month', $timestamp));
