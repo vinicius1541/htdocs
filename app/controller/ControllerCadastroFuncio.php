@@ -128,11 +128,12 @@ class ControllerCadastroFuncio extends ClassFuncionario
             $this->dtEntrada = date('d/m/Y', strtotime("$dados[dtEntrada]"));
             $accessNvl = "$dados[nivelacesso_id]";
             $this->nivelacesso_id = $accessNvl == 3 ? "text-danger" : "";
+            $blocked = $accessNvl == 3 ? "<strong>(acesso negado)</strong>" : "";
 
             echo "
                 <tr>
                     <th scope='row'>$dados[funcionario_id]</th>
-                    <td class='{$this->nivelacesso_id}'>$dados[nome]</td>
+                    <td class='{$this->nivelacesso_id}'>$dados[nome]{$blocked}</td>
                     <td>$dados[login]</td>
                     <td>{$this->dtEntrada}</td>
                     <td>$dados[celular]</td>
