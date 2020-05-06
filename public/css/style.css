@@ -329,9 +329,13 @@
 
   /*####### calendar #######*/
 table{
-  vertical-align: middle;
   text-align: center;
-  table-layout: fixed;
+  table-layout: auto;
+
+}
+
+table td{
+  height: 84px !important;
 }
 
 .tab_btn{
@@ -339,3 +343,31 @@ table{
   color: black;
   border: white !important;
 }
+
+.diatabela{
+  font-size: xx-small;
+  text-align: left;
+  height: 60px;
+}
+
+.today{
+  background: orange;
+}
+
+td:nth-of-type(1), td:nth-of-type(7) {
+  color:salmon;
+}
+
+th:nth-of-type(1), th:nth-of-type(7) {
+  color:red;
+}
+
+h3{
+  text-align: center;
+}
+
+h3 a:hover{
+  background-color: skyblue;
+  text-decoration: none;
+}
+
