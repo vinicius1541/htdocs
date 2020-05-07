@@ -5,8 +5,7 @@ use Src\Classes\ClassRender;
 use App\Model\ClassFuncionario;
 use App\Model\ClassUsuario;
 
-class ControllerCadastroFuncio extends ClassFuncionario
-{
+class ControllerCadastroFuncio extends ClassFuncionario{
     use \Src\Traits\TraitUrlParser;
 
     protected $usuario;
@@ -29,8 +28,12 @@ class ControllerCadastroFuncio extends ClassFuncionario
         if (count($this->parseUrl()) == 1) {
             $render = new ClassRender();
             if (isset($_SESSION['logado'])) {
-                if ($_SESSION['nivelacesso'] >= 2):
+                if ($_SESSION['nivelacesso'] == 2):
                     header('Location: ' . DIRPAGE . 'home');
+                    exit();
+                elseif($_SESSION['nivelacesso'] == 3):
+                    unset($_SESSION['msg']); unset($_SESSION['erro']); unset($_SESSION['sucesso']);
+                    header('Location: ' . DIRPAGE . 'login');
                     exit();
                 else:
                     $render->setTitle("Cadastro de Funcionario");
@@ -45,8 +48,12 @@ class ControllerCadastroFuncio extends ClassFuncionario
     }
 
     public function recebeVariaveis(){
-        if ($_SESSION['nivelacesso'] >= 2):
+        if ($_SESSION['nivelacesso'] == 2):
             header('Location: ' . DIRPAGE . 'home');
+            exit();
+        elseif($_SESSION['nivelacesso'] == 3):
+            unset($_SESSION['msg']); unset($_SESSION['erro']); unset($_SESSION['sucesso']);
+            header('Location: ' . DIRPAGE . 'login');
             exit();
         else:
             if (isset($_POST['login'])){$this->login = filter_input(INPUT_POST, 'login', FILTER_SANITIZE_SPECIAL_CHARS);}
@@ -92,7 +99,7 @@ class ControllerCadastroFuncio extends ClassFuncionario
         <link href='" . DIRCSS . 'style.css' . "' rel='stylesheet'/>
         <link href='" . DIRCSS . 'bootstrap.css' . "' rel='stylesheet'/>
         <body class='fundoLogado'>";
-            if (isset($_SESSION['sucesso'])) :
+            if (isset($_SESSION['sucesso'])):
                 echo "
             <div class='alert alert-success'>
                 <p>" . $_SESSION['msg'] . "</p>
@@ -106,6 +113,7 @@ class ControllerCadastroFuncio extends ClassFuncionario
             unset($_SESSION['erro']);
             unset($_SESSION['sucesso']);
             unset($_SESSION['msg']);
+
             echo "
         <div class='tabelaFunc table-responsive'>
             <table class='table table-hover table-dark table-striped table-bordered'>

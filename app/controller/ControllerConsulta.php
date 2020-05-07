@@ -20,7 +20,7 @@ class ControllerConsulta extends ClassConsulta {
             $render = new ClassRender();
             if (isset($_SESSION['logado'])) {
                 if ($_SESSION['nivelacesso'] > 2):
-                    header('Location: ' . DIRPAGE . 'home');
+                    header('Location: ' . DIRPAGE . 'login');
                     exit();
                 else:
                     $render->setTitle("Consultório OdontoMonicao");

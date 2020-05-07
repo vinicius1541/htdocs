@@ -14,7 +14,6 @@ class ClassLogin extends ClassConexao{
 
         if($row = $BFetch->rowCount()>0){
             $_SESSION['login'] = $login;
-
             $C=$BFetch->fetch( \PDO::FETCH_ASSOC );
             $_SESSION['funcionario_id'] = $C['funcionario_id'];
             $_SESSION['nivelacesso'] = $C['nivelacesso_id'];
