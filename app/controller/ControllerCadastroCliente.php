@@ -19,8 +19,12 @@ class ControllerCadastroCliente extends ClassCliente{
         if (count($this->parseUrl()) == 1) {
             $render = new ClassRender();
             if (isset($_SESSION['logado'])) {
-                if ($_SESSION['nivelacesso'] >= 2):
+                if ($_SESSION['nivelacesso'] == 2):
                     header('Location: ' . DIRPAGE . 'home');
+                    exit();
+                elseif($_SESSION['nivelacesso'] == 3):
+                    unset($_SESSION['msg']); unset($_SESSION['erro']); unset($_SESSION['sucesso']);
+                    header('Location: ' . DIRPAGE . 'login');
                     exit();
                 else:
                     $render->setTitle("Cadastro de Clientes");
@@ -37,7 +41,8 @@ class ControllerCadastroCliente extends ClassCliente{
     # Vai receber as variaveis
     public function recebeVariaveis(){
         if ($_SESSION['nivelacesso'] >= 2):
-            header('Location: ' . DIRPAGE . 'home');
+            unset($_SESSION['msg']); unset($_SESSION['erro']); unset($_SESSION['sucesso']);
+            header('Location: ' . DIRPAGE . 'login');
             exit();
         else:
             if (isset($_POST['cliente_id'])){$this->cliente_id = $_POST['cliente_id'];}
@@ -91,9 +96,10 @@ class ControllerCadastroCliente extends ClassCliente{
                 <p>" . $_SESSION['msg'] . "</p>
             </div>";
         endif;
-        unset($_SESSION['erro']);
         unset($_SESSION['sucesso']);
+        unset($_SESSION['erro']);
         unset($_SESSION['msg']);
+        unset($_SESSION['msg_erro']);
         echo "
         <div class='tabelaFunc table-responsive'>
             <table class='table table-hover table-dark table-striped table-bordered'>

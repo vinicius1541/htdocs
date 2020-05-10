@@ -6,6 +6,7 @@
     <!-- # CSS -->
     <link href="<?php echo DIRCSS . 'bootstrap.min.css' ?>" rel="stylesheet"/>
     <link href="<?php echo DIRCSS . 'style.css' ?>" rel="stylesheet"/>
+    <link href="<?php echo DIRCSS . 'calendar.css' ?>" rel="stylesheet"/>
     <link href="<?php echo DIRCSS . 'bootstrap.css' ?>" rel="stylesheet"/>
 
     <title><?php echo $this->getTitle(); ?></title>

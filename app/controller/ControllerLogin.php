@@ -40,21 +40,12 @@ class ControllerLogin extends ClassLogin {
             header('Location: ' . DIRPAGE . 'login');
             exit();
         }
-        /*if(!isset($_SESSION['logado']) || ($_SESSION['logado'] <> true)){
-            if (empty($_POST['login']) || empty($_POST['senha'])) {
-                header('Location: ' . DIRPAGE . 'login');
-                exit();
-            }
-        }
-        if(isset($_SESSION['nao_logado'])){
-            header('Location: ' . DIRPAGE . 'login');
-            exit();
-        }*/
     }
     public function logout(){
         unset($_SESSION['logado']);
         unset($_SESSION['funcionario_id']);
-
+        unset($_SESSION['login']);
+        unset($_SESSION['nao_logado']);
         header('Location: ' . DIRPAGE . 'login');
         exit();
     }
