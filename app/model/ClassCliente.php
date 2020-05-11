@@ -54,7 +54,7 @@ class ClassCliente extends ClassConexao{
             return false;
         endif;
     }
-    protected function listarClientes(){
+    public function listarClientes(){
         $BFetch=$this->conexaoDB()->prepare("SELECT * FROM clientes");
         $BFetch->rowCount();
         $BFetch->execute();

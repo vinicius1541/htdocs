@@ -6,8 +6,13 @@ date_default_timezone_set('America/Sao_Paulo');
 // Get prev & next month
 if (isset($_GET['ym'])) {
     $ym = $_GET['ym'];
+    if(empty($ym)){
+        header('Location: ' . DIRPAGE . 'consulta?ym=' . date('Y-m'));
+    }
 } else {
     $ym = date('Y-m'); //esta formatação para não dar ruim no banco pelo _POST
+    header('Location: ' . DIRPAGE . 'consulta?ym=' . $ym);
+
 }
 
 // Check formatação
@@ -42,14 +47,27 @@ $week = ''; //inicia elemento vazio                     | não sei pq assim esse
 // Adiciona semanas                |           os <h6> fazem os dias ficarem no canto superior esq
 $week .= str_repeat('<td></td>', $str); //adiciona célula em branco até começar a semana
 
+$dateArray = explode("-", rtrim($ym), FILTER_SANITIZE_URL); #serve para quebrar o texto em array usando o delimitador '-'
+$contArray=count($dateArray);
+if($contArray==1){
+    header('Location: ' . DIRPAGE . 'consulta?ym=' . date('Y-m'));
+}
+$implodeArray = $dateArray[0].'-'.$dateArray[1];
 for ($day = 1; $day <= $day_count; $day++, $str++) {  // adiciona datas com formato ano-mes-dia
+    if($day < 10){
+        $day='0'.$day;
+    }
+    if($contArray==3){
+        $dateAtual = $implodeArray . '-' . $day;
+    }else{
+        $date = $ym;
+        $dateAtual=$ym . '-' . $day;
+    }
 
-    $date = $ym . '-' . $day;
-
-    if ($today == $date) {  //verifica se é o dia atual e se for, marca em amarelo
-        $week .= '<td class="today"><h6 class="diatabela">' . $day .'</h6>';
+    if ($today == $dateAtual) {  //verifica se é o dia atual e se for, marca em amarelo
+        $week .= '<td class="today"><h6 class="diatabela"><a style="text-decoration: none;color: inherit" href="' . DIRPAGE . "consulta/cadastro/" . $implodeArray . '-' . $day. '">' . $day . '</a></h6>';
     } else {
-        $week .= '<td><h6 class="diatabela">' . $day . '</h6>';
+        $week .= '<td><a style="text-decoration: none; color: inherit" href="' . DIRPAGE . "consulta/cadastro/" . $implodeArray . '-' . $day. '"><h6 class="diatabela">' . $day . '</h6></a>';
     }
     $week .= '</td>';
 
