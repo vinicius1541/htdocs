@@ -41,10 +41,16 @@ ob_start();
                 </li>
 
             <?php endif; ?>
-
-            <li class="nav-item">
-                <a class="nav-link" href="<?php echo DIRPAGE . 'consulta';?>">Consultas</a>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Gerenciar consultas
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" href="<?php echo DIRPAGE . 'consulta';?>">Abrir consulta</a>
+                    <a class="dropdown-item" href="<?php echo DIRPAGE . 'consulta/listar';?>">Listar consultas</a>
+                </div>
             </li>
+
             <li class="nav-item">
                 <a class="nav-link" href="#">Estoque</a>
             </li>

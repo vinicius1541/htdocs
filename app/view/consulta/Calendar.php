@@ -65,7 +65,7 @@ for ($day = 1; $day <= $day_count; $day++, $str++) {  // adiciona datas com form
     }
 
     if ($today == $dateAtual) {  //verifica se é o dia atual e se for, marca em amarelo
-        $week .= '<td class="today"><h6 class="diatabela"><a style="text-decoration: none;color: inherit" href="' . DIRPAGE . "consulta/cadastro/" . $implodeArray . '-' . $day. '">' . $day . '</a></h6>';
+        $week .= '<td class="today"><a style="text-decoration: none;color: inherit" href="' . DIRPAGE . "consulta/cadastro/" . $implodeArray . '-' . $day. '"><h6 class="diatabela">' . $day . '</h6></a>';
     } else {
         $week .= '<td><a style="text-decoration: none; color: inherit" href="' . DIRPAGE . "consulta/cadastro/" . $implodeArray . '-' . $day. '"><h6 class="diatabela">' . $day . '</h6></a>';
     }
