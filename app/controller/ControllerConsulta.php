@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Model\ClassCliente;
 use App\Model\ClassConsulta;
+use App\Model\ClassFuncionario;
 use DateTimeZone;
 use Src\Classes\ClassRender;
 
@@ -14,6 +16,23 @@ date_default_timezone_set('America/Sao_Paulo');
 
 class ControllerConsulta extends ClassConsulta {
     use \Src\Traits\TraitUrlParser;
+    protected $consulta_id;
+    protected $dtConsulta;
+    protected $hr_inicio;
+    protected $hr_final;
+    protected $custo;
+    protected $desconto;
+    protected $dtAbertura;
+    protected $dtEncerr;
+    protected $problema;
+    protected $solucao;
+    protected $situacao;
+    protected $cliente_id;
+    protected $funcionario_id;
+    protected $funcao_id;
+    protected $clienteNome;
+    protected $funcioNome;
+    protected $horarioInicio;
 
     public function __construct(){
         if (count($this->parseUrl()) == 1) {
@@ -25,7 +44,7 @@ class ControllerConsulta extends ClassConsulta {
                 else:
                     $render->setTitle("Consultório OdontoMonicao");
                     $render->setDir("consulta");
-                    $render->renderConsulta();
+                    $render->renderLayout();
                 endif;
             } elseif (isset($_SESSION['nao_logado'])) {
                 header('Location: ' . DIRPAGE . 'login');
@@ -33,37 +52,364 @@ class ControllerConsulta extends ClassConsulta {
             }
         }
     }
+    # Irá receber as variáveis
+    public function recebeVariaveis(){
+        if($_SESSION['nivelacesso'] == 3):
+            unset($_SESSION['msg']); unset($_SESSION['erro']); unset($_SESSION['sucesso']);
+            header('Location: ' . DIRPAGE . 'login');
+            exit();
+        else:
+            if (isset($_POST['consulta_id'])){$this->consulta_id = filter_input(INPUT_POST, 'consulta_id', FILTER_SANITIZE_SPECIAL_CHARS);}
+            if (isset($_POST['dtConsulta'])){$this->dtConsulta = filter_input(INPUT_POST, 'dtConsulta', FILTER_SANITIZE_SPECIAL_CHARS);}
+            if (isset($_POST['hr_inicio'])){ $this->hr_inicio = filter_input(INPUT_POST, 'hr_inicio', FILTER_SANITIZE_SPECIAL_CHARS);}
+            if (isset($_POST['hr_final'])){$this->hr_final = filter_input(INPUT_POST, 'hr_final', FILTER_SANITIZE_SPECIAL_CHARS);}
+            if (isset($_POST['custo'])){$this->custo = filter_input(INPUT_POST, 'custo', FILTER_SANITIZE_SPECIAL_CHARS);}
+            if (isset($_POST['desconto'])){$this->desconto = filter_input(INPUT_POST, 'desconto', FILTER_SANITIZE_SPECIAL_CHARS);}
+            if (isset($_POST['dtAbertura'])){$this->dtAbertura = filter_input(INPUT_POST, 'dtAbertura', FILTER_SANITIZE_SPECIAL_CHARS);}
+            if (isset($_POST['dtEncerr'])){$this->dtEncerr = filter_input(INPUT_POST, 'dtEncerr', FILTER_SANITIZE_SPECIAL_CHARS);}
+            if (isset($_POST['problema'])){$this->problema = filter_input(INPUT_POST, 'problema', FILTER_SANITIZE_SPECIAL_CHARS);}
+            if (isset($_POST['solucao'])){$this->solucao = filter_input(INPUT_POST, 'solucao', FILTER_SANITIZE_SPECIAL_CHARS);}
+            if (isset($_POST['situacao'])){$this->situacao = filter_input(INPUT_POST, 'situacao', FILTER_SANITIZE_SPECIAL_CHARS);}
+            if (isset($_POST['cliente_id'])){$this->cliente_id = filter_input(INPUT_POST, 'cliente_id', FILTER_SANITIZE_SPECIAL_CHARS);}
+            if (isset($_POST['funcionario_id'])){$this->funcionario_id = filter_input(INPUT_POST, 'funcionario_id', FILTER_SANITIZE_SPECIAL_CHARS);}
+            if (isset($_POST['funcao_id'])){$this->funcao_id = filter_input(INPUT_POST, 'funcao_id', FILTER_SANITIZE_SPECIAL_CHARS);}
+        endif;
+    }
     public function monthPT_BR(){
         return strtoupper(strftime('%B / %Y', strtotime('today')));
     }
+    public function cadastro($dtConsulta){
+        $this->recebeVariaveis();
+        $cliente = new ClassCliente();
+        $clienteArray = $cliente->listarClientes();
+        $funcio = new ClassFuncionario();
+        $funcioArray = $funcio->listarDentistas();
+        $horarioArray = $this->listarHorarios();
+        ?>
+        <link href="<?php echo DIRCSS . 'bootstrap.min.css' ?>" rel="stylesheet"/>
+        <link href="<?php echo DIRCSS . 'style.css' ?>" rel="stylesheet"/>
+        <link href="<?php echo DIRCSS . 'bootstrap.css' ?>" rel="stylesheet"/>
+        <body class="fundo">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-auto col-md-auto col-lg-auto mx-auto">
+                    <div class="fundoLogado card card-signin my-5">
+                        <div class="card-body">
+                            <?php
+                            if (isset($_SESSION['status_consulta'])) :
+                                ?>
+                                <div class='alert alert-success'>
+                                    <p><?php echo $_SESSION['msg'];?></p>
+                                </div>
+                            <?php endif;
+                            unset($_SESSION['status_consulta']); ?>
+                            <?php
+                            if (isset($_SESSION['erro'])) :
+                                ?>
+                                <div class='alert alert-danger'>
+                                    <p><?php echo $_SESSION['msg'];?></p>
+                                </div>
+                            <?php endif;
+                            unset($_SESSION['erro']);
+                            unset($_SESSION['msg']);
+                            ?>
+                            <h5 class="card-title text-center">Cadastro de Consulta</h5>
+                            <form class="form-signin" action="<?php echo DIRPAGE.'consulta/cadastrar'?>" method="POST">
+                                <div class="form-group">
+                                    <div class="form-label-group">
+                                        <input name="dtConsulta" type="text" class="form-control" id="inputDtConsulta" placeholder="dtConsulta" autocomplete="off" value="<?php echo $dtConsulta;?>" required>
+                                        <label for="inputDtConsulta">Data da Consulta</label>
+                                    </div>
+                                </div>
+                                <div class="form-row">
 
-    #implementar busca de consultas no mês para exibir no calendário
-    /*public function buscaConsulta($mes)
-    {
-        $mes->monthPT_BR();
-        return $mes;
-    }
+                                    <div class="form-group col-md-6">
+                                        <div class="form-label-group">
+                                            <select name="hr_inicio" id="inputHr_inicio" class="form-control">
+                                                <option selected>Selecionar horário inicial</option>
+                                                <?php
+                                                foreach ($horarioArray as $hr_inicial){
+                                                    echo "
+                                                <option value='$hr_inicial[horario_id]'>$hr_inicial[horario]</option>
+                                                ";
+                                                }?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <div class="form-label-group">
+                                            <select name="hr_final" id="inputHr_final" class="form-control">
+                                                <option selected>Selecionar horário final</option>
+                                                <?php
+                                                foreach ($horarioArray as $hr_final){
+                                                    echo "
+                                                <option value='$hr_final[horario_id]'>$hr_final[horario]</option>
+                                                ";
+                                                }?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <div class="form-label-group">
+                                            <input name="custo" type="number" class="form-control" id="inputCusto" placeholder="Custo" autocomplete="off" required>
+                                            <label for="inputCusto">Custo</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <div class="form-label-group">
+                                            <input name="desconto" type="number" class="form-control" id="inputDesconto" placeholder="Desconto" autocomplete="off" required>
+                                            <label for="inputDesconto">Desconto</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="form-label-group">
+                                        <textarea name="problema" class="form-control" id="inputProblema" placeholder="Problema" required></textarea>
+                                    </div>
+                                </div><!--
+                                <div class="form-group">
+                                    <div class="form-label-group">
+                                        <textarea name="solucao" class="form-control" id="inputSolucao" placeholder="Solucao" required></textarea>
+                                    </div>
+                                </div>-->
+                                <div class="form-group">
+                                    <div class="form-label-group text-center">
+                                        <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                                            <input name="situacao" type="checkbox" class="custom-control-input" id="customControlInline">
+                                            <label class="custom-control-label" for="customControlInline">Situação</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group ">
+                                    <div class="form-label-group">
+                                        <select name="cliente_id" id="inputCliente" class="form-control">
+                                            <option selected>Selecione o cliente</option>
+                                            <?php
+                                            foreach ($clienteArray as $dadosCliente){
+                                                echo "
+                                                <option value='$dadosCliente[cliente_id]'>$dadosCliente[cli_nome]</option>
+                                                ";
+                                            }?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group ">
+                                    <div class="form-label-group">
+                                        <select name="funcionario_id" id="inputFuncionario" class="form-control">
+                                            <option value="#">Selecione o profissional</option>
+                                            <?php
+                                                foreach ($funcioArray as $dadosFuncio){
+                                                    echo "
+                                                    <option value='$dadosFuncio[funcionario_id]'>$dadosFuncio[nome]</option>
+                                                    ";
+                                                }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
 
-    public function buscaFirstDay(){
-        $today= getdate();
-        $lastDay = strftime('%d',mktime(0,0,0,$today['mon'],1,$today['year']));
-        return $lastDay;
+                                <div class="text-center">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-7">
+                                            <a href="<?php echo DIRPAGE . 'consulta/listar'; ?>"><button id="listarConsulta" type="button" class="my-btn btn btn-warning btn-lg text-uppercase">Listar Consultas</button></a>
+                                        </div>
+                                        <div class="form-group col-md-5">
+                                            <button type="submit" class="btn btn-primary btn-block btn-lg text-uppercase">Cadastrar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="<?php echo DIRJS . 'jquery.min.js' ?>"></script>
+        <script src="<?php echo DIRJS . 'bootstrap.min.js' ?>"></script>
+        <script src="<?php echo DIRJS . 'bootstrap.bundle.min.js'?>"></script>
+        </body>
+        <?php
     }
-    public function buscaLastDay(){
-        $today= getdate();
-        $lastDay = strftime('%d',mktime(0,0,0,$today['mon']+1,0,$today['year']));
-        return $lastDay;
+    public function cadastrar(){
+        $this->recebeVariaveis();
+        /*var_dump($this->dtConsulta);echo "<br>";
+        var_dump($this->hr_inicio);echo "<br>";
+        var_dump($this->hr_final);echo "<br>";
+        var_dump($this->custo);echo "<br>";
+        var_dump($this->desconto);echo "<br>";
+        var_dump($this->problema);echo "<br>";
+        var_dump($this->solucao);echo "<br>";
+        var_dump($this->situacao);echo "<br>";
+        var_dump($this->cliente_id);echo "<br>";
+        var_dump($this->funcionario_id);echo "<br>";*/
+        if($this->situacao==true){ # A situaçao é o checkbox do formulário
+            $this->situacao=1;
+        }else{
+            $this->situacao=0;
+        }
+        $validar = $this->verificarHorario($this->funcionario_id,$this->dtConsulta,$this->hr_inicio,$this->hr_final);
+        if($validar==true):
+            $_SESSION['erro']=true;
+            $_SESSION['msg'] = "Este funcionário já tem consulta agendada neste horário/data";
+        else:
+            $C = $this->abrirConsultas($this->dtConsulta,$this->hr_inicio,$this->hr_final,$this->custo,$this->desconto,$this->problema,$this->situacao,$this->cliente_id,$this->funcionario_id);
+            if($C==true):
+                $_SESSION['status_consulta'] = true;
+                $_SESSION['msg'] = "Consulta marcada com sucesso!";
+            else:
+                $_SESSION['erro'] = true;
+                $_SESSION['msg'] = "Ocorreu um erro ao tentar abrir a consulta :(";
+            endif;
+        endif;
+        header('Location: ' . DIRPAGE . 'consulta/cadastro/' . $this->dtConsulta);
+        exit();
     }
+    public function listar(){
+        $this->recebeVariaveis();
+        $Array = $this->listarConsultas();
+        $cliente = new ClassCliente();
+        $clienteArray = $cliente->listarClientes();
+        $funcio = new ClassFuncionario();
+        $funcioArray = $funcio->listarDentistas();
+        $horarioArray = $this->listarHorarios();
 
-    public function prev(){
-        return strtoupper(strftime('%B / %Y', strtotime('-1 month')));
-    }
+        ?>
+        <link href="<?php echo DIRCSS . 'bootstrap.min.css' ?>" rel="stylesheet"/>
+        <link href="<?php echo DIRCSS . 'style.css' ?>" rel="stylesheet"/>
+        <link href="<?php echo DIRCSS . 'bootstrap.css' ?>" rel="stylesheet"/>
+        <body class="fundo">
+            <?php
+            if (isset($_SESSION['sucesso'])): ?>
 
-    public function next(){
-        return strtoupper(strftime('%B / %Y', strtotime('+1 month')));
-    }
+            <div class='alert alert-success'>
+                <p><?php echo $_SESSION['msg'];?></p>
+            </div>
+            <?php
+            elseif (isset($_SESSION['erro'])) :
+            ?>
+            <div class='alert alert-danger'>
+                <p><?php echo $_SESSION['msg'];?></p>
+            </div>
+            <?php
+            endif;
+            unset($_SESSION['erro']);
+            unset($_SESSION['sucesso']);
+            unset($_SESSION['msg']);
+            ?>
+            <div class='tabelaFunc table-responsive'>
+                <table class='table table-hover table-dark table-striped table-bordered'>
+                    <thead class='thead-dark '>
+                    <tr>
+                        <th scope='col'>#</th>
+                        <th scope='col'>Cliente</th>
+                        <th scope='col'>Profissional</th>
+                        <th scope='col'>Data Consulta</th>
+                        <th scope='col'>Hora</th>
+                        <th scope='col'>Problema</th>
+                        <th scope='col'>Custo</th>
+                        <th scope='col'>Situação</th>
+                    </tr>
+                    </thead>
+                    <tbody>
 
-    public function nofDay(){
-        return strtoupper(strftime('%B / %Y', strtotime('-1 month')));
-    }*/
+                <?php foreach ($Array as $dados) {
+                    foreach ($clienteArray as $cliente){
+                        if($cliente['cliente_id'] == $dados['cliente_id']){
+                            $this->clienteNome = $cliente['cli_nome'];
+                        }
+                    }
+                    foreach ($funcioArray as $funcio){
+                        if($funcio['funcionario_id'] == $dados['funcionario_id']){
+                            $this->funcioNome = $funcio['nome'];
+                        }
+                    }
+                    foreach ($horarioArray as $horario){
+                        if($horario['horario_id'] == $dados['hr_inicio']){
+                            $this->horarioInicio = $horario['horario'];
+                        }
+                    }
+                    $situation = "$dados[situacao]";
+                    $this->situacao = $situation == 1 ? "<strong style='color:lightgreen'>Pago</strong>" : "<strong style='color:red'>Pendente</strong>";
+                    $this->dtConsulta = date('d/m/Y', strtotime("$dados[dtConsulta]"));
+
+                    echo "<tr>
+                        <th scope='row'>$dados[consulta_id]</th>
+                        <td>{$this->clienteNome}</td>
+                        <td>{$this->funcioNome}</td>
+                        <td>{$this->dtConsulta}</td>
+                        <td>{$this->horarioInicio}</td>
+                        <td>$dados[problema]</td>
+                        <td>R$$dados[custo],00</td>
+                        <td>{$this->situacao}</td>
+                        
+                        <td>
+                            <div class=' text-center'>
+                                <a href='" . DIRPAGE . 'consulta/editando/' . "$dados[consulta_id]'><button type='button' class='btn btn-success'>Editar</button></a>
+                                <a href='" . DIRPAGE . 'consulta/confirmar_exclusao/' . "$dados[consulta_id]'><button type='button' class='btn btn-danger' data-toggle='modal' data-target='#modalExemplo'>Excluir</button></a>
+                            </div>
+                        </td>
+                    </tr>";
+                    }
+                    echo "
+                    </tbody >
+                </table>
+                <div class='col text-center'>
+                    <a href='" . DIRPAGE . 'home' . "'><button type='button' class='btn btn-warning btn-lg text-uppercase'>Voltar</button></a>
+                    <a href='" . DIRPAGE . 'consulta' . "'><button type='button' class='btn btn-primary btn-lg text-uppercase'>Calendário</button></a><br>
+                </div>
+            </div>
+            
+            <script src='" . DIRJS . 'jquery.min.js' . "'></script>
+        <script src='" . DIRJS . 'bootstrap.min.js' . "'></script>
+            <script src='" . DIRJS . 'bootstrap.bundle.min.js' . "'></script>
+        </body>
+        ";
+    }
+    public function confirmar_exclusao($consulta_id){
+        $this->recebeVariaveis();
+        echo "
+        <link href='" . DIRCSS . 'bootstrap.min.css' . "' rel='stylesheet'/>
+        <link href='" . DIRCSS . 'style.css' . "' rel='stylesheet'/>
+        <link href='" . DIRCSS . 'bootstrap.css' . "' rel='stylesheet'/>
+        <body class='fundo'>
+
+        <div style='outline: none' id='modalExemplo' tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true'>
+            <div class='modal-dialog' role='document'>
+                <div class='modal-content'>
+                    <div class='modal-header'>
+                        <h5 class='modal-title' id='exampleModalLabel'>Tem certeza que deseja continuar?</h5>
+                        <a href='" . DIRPAGE . 'cadastro_funcio/listar' . "'> <button style='outline: none' type='button' class='close' data-dismiss='modal' aria-label='Fechar'>
+                            <span aria-hidden='true'>&times;</span>
+                        </button></a>
+                    </div>
+                    <div style='color: darkred;outline: none' class='modal-body'>
+                        <strong>A consulta selecionada será excluída permanentemente!<br>(muito tempo!)</strong>
+                    </div>
+                    <div class='modal-footer'>
+                        <a href='" . DIRPAGE . 'consulta/listar/' . "'><button type='button' class='btn btn-primary' data-dismiss='modal'>Voltar</button></a>
+                        <a href='" . DIRPAGE . 'consulta/excluir/' . "{$consulta_id}'><button type='button' class='btn btn-danger'>Excluir</button></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src='" . DIRJS . 'jquery.min.js' . "'></script>
+        <script src='" . DIRJS . 'bootstrap.min.js' . "'></script>
+        <script src='" . DIRJS . 'bootstrap.bundle.min.js' . "'></script>
+        </body>";
+    }
+    public function excluir($consulta_id){
+        $this->recebeVariaveis();
+        $C = $this->excluirConsulta($consulta_id);
+        if($C):
+            $_SESSION['sucesso'] = true;
+            $_SESSION['msg'] = "Consulta excluída com sucesso!";
+        else:
+            $_SESSION['erro'] = true;
+            $_SESSION['msg'] = "Sinto muito, ocorreu um erro ao tentar excluir a consulta :(";
+        endif;
+        header('Location: ' . DIRPAGE . 'consulta/listar');
+        exit();
+    }
 }

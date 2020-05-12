@@ -12,12 +12,12 @@ class ControllerLogin extends ClassLogin {
     use \Src\Traits\TraitUrlParser;
 
     public function __construct(){
-            if(count($this->parseUrl()) == 1){
-                $render = new ClassRender();
-                $render->setTitle("Login");
-                $render->setDir("login");
-                $render->renderLoginPage();
-            }
+        if(count($this->parseUrl()) == 1){
+            $render = new ClassRender();
+            $render->setTitle("Login");
+            $render->setDir("login");
+            $render->renderLoginPage();
+        }
     }
     # Vai receber as variaveis
     public function recebeVariaveis(){
@@ -42,10 +42,7 @@ class ControllerLogin extends ClassLogin {
         }
     }
     public function logout(){
-        unset($_SESSION['logado']);
-        unset($_SESSION['funcionario_id']);
-        unset($_SESSION['login']);
-        unset($_SESSION['nao_logado']);
+        session_destroy();
         header('Location: ' . DIRPAGE . 'login');
         exit();
     }

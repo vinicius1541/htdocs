@@ -21,10 +21,6 @@ class ClassRender{
     public function renderLoginPage(){
         include_once(DIRREQ . "app/view/login/login.php");
     }
-    # Método que carrega a tela de Consulta
-    public function renderConsulta(){
-        include_once(DIRREQ . "app/view/consulta/ConsultaLayout.php");
-    }
     # Método que vai adicionar características específicas no head
     public function addHead(){
         if(file_exists(DIRREQ."app/view/{$this->getDir()}/Head.php")){

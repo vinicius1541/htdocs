@@ -1,8 +1,8 @@
 /*####### calendar #######*/
 table{
     text-align: center;
-    table-layout: auto;
-    width: fit-content !important;
+    /*table-layout: auto;
+    width: fit-content !important;*/
 }
 
 table td{

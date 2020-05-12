@@ -36,7 +36,7 @@ class Dispatch extends ClassRoutes{
 
             $this->setMethod("{$this->parseUrl()[1]}");
             self::addParam();
-            call_user_func_array([$this->obj, $this->getMethod()], $this->getParam()); //chamar um array de parametrosl
+            call_user_func_array([$this->obj, $this->getMethod()], $this->getParam()); //chamar um array de parametros
         }
     }
     # Método de adiçao de parametros do controller
@@ -49,6 +49,5 @@ class Dispatch extends ClassRoutes{
                 }
             }
         }
-
     }
 }

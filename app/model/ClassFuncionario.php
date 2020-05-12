@@ -69,7 +69,23 @@ class ClassFuncionario extends ClassConexao{
         }
         return $array;
     }
-    # Editar Funcionário
+    public function listarDentistas(){
+        $BFetch=$this->db=$this->conexaoDB()->prepare("SELECT * FROM funcionarios WHERE funcao_id=2");
+        #$BFetch->bindParam(":funcionario_id", $funcionario_id, \PDO::PARAM_STR);
+        $BFetch->rowCount();
+        $BFetch->execute();
+        $i=0;
+        while ($fetch=$BFetch->fetch(\PDO::FETCH_ASSOC)){
+            $array[$i]=[
+                'funcionario_id'=>$fetch['funcionario_id'],
+                'nome'=>$fetch['nome'],
+                'funcao_id'=>$fetch['funcao_id']
+            ];
+            $i++;
+        }
+        return $array;
+    }
+    # Método que irá buscar o funcionário que será editado
     protected function procurarFuncionario($funcionario_id){
         $BFetch=$this->db=$this->conexaoDB()->prepare("SELECT * FROM funcionarios f INNER JOIN usuarios u ON u.funcionario_id = f.funcionario_id AND f.funcionario_id=:funcionario_id");
         $BFetch->bindParam(":funcionario_id", $funcionario_id, \PDO::PARAM_INT);

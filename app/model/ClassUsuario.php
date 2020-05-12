@@ -35,12 +35,6 @@ class ClassUsuario extends ClassConexao{
         $BFetch->bindParam(":nivelacesso_id", $nivelacesso_id, \PDO::PARAM_INT);
         $BFetch->bindParam(":funcionario_id", $funcioId, \PDO::PARAM_INT);
 
-        /*echo "<br>idFuncionario:". $funcId;
-        echo "<br>Login:" . $login;
-        echo "<br>Senha:" . $senha;
-        echo "<br>NivelAcesso:" . $nivelacesso_id;
-        echo "<br>CPF:" . $cpf;
-        echo "<br>Ativo:" . $ativo;*/
         $BFetch->execute();
     }
     public function editarUsuario($login,$senha,$nivelacesso_id,$cpf){

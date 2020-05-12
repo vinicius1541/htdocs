@@ -12,156 +12,109 @@ class ClassConsulta extends ClassConexao{
     private $db;
     use \Src\Traits\TraitUrlParser;
 
-    # Atributos
-    private $consulta_id;
-    private $dtConsulta;
-    private $hrConsulta;
-    private $custo;
-    private $desconto;
-    private $dtAbertura;
-    private $dtEncerr;
-    private $solucao;
-    private $situacao;
-    private $cliente_id;
-    private $funcionario_id;
-    private $funcao_id;
-    # $this->funcionario_id=$this->getFuncionarioId();
-    # Métodos getters e setters
-    public function setDtConsulta($dtConsulta)
-    {
-        $this->dtConsulta = $dtConsulta;
-
+    # Método que irá buscar a lista de horários
+    protected function listarHorarios(){
+        $BFetch=$this->conexaoDB()->prepare("SELECT * FROM horarios");
+        $BFetch->rowCount();
+        $BFetch->execute();
+        $i=0;
+        while ($fetch=$BFetch->fetch(\PDO::FETCH_ASSOC)){
+            $array[$i]=[
+                'horario_id'=>$fetch['horario_id'],
+                'horario'=>$fetch['horario']
+            ];
+            $i++;
+        }
+        return $array;
     }
 
-    public function getDtConsulta()
-    {
-        return $this->dtConsulta;
+    protected function verificarHorario($funcionario_id,$dtConsulta, $hr_inicio, $hr_final){
+        $BFetch=$this->conexaoDB()->prepare("SELECT * FROM consultas WHERE dtConsulta=:dtConsulta and funcionario_id=:funcionario_id and (hr_inicio=:hr_inicio or hr_final=:hr_final);");
+        $BFetch->bindParam(":hr_inicio", $hr_inicio, \PDO::PARAM_INT);
+        $BFetch->bindParam(":hr_final", $hr_final, \PDO::PARAM_INT);
+        $BFetch->bindParam(":dtConsulta", $dtConsulta);
+        $BFetch->bindParam(":funcionario_id", $funcionario_id, \PDO::PARAM_INT);
+        $BFetch->execute();
+        if($row = $BFetch->rowCount()>0):
+            return true;
+        else:
+            return false;
+        endif;
     }
-
-    public function setHrConsulta($hrConsulta)
-    {
-        $this->hrConsulta = $hrConsulta;
-    }
-
-    public function getHrConsulta()
-    {
-        return $this->hrConsulta;
-    }
-
-    public function setCusto($custo)
-    {
-        $this->custo = $custo;
-    }
-
-    public function getCusto()
-    {
-        return $this->custo;
-    }
-
-    public function setDesconto($desconto)
-    {
-        $this->desconto = $desconto;
-    }
-
-    public function getDesconto()
-    {
-        return $this->desconto;
-    }
-
-    public function setDtAbertura($dtAbertura)
-    {
-        $this->dtAbertura = $dtAbertura;
-    }
-
-    public function getDtAbertura()
-    {
-        return $this->dtAbertura;
-    }
-
-    public function setDtEncerr($dtEncerr)
-    {
-        $this->dtEncerr = $dtEncerr;
-    }
-
-    public function getDtEncerr()
-    {
-        return $this->dtEncerr;
-    }
-
-    public function setSolucao($solucao)
-    {
-        $this->solucao = $solucao;
-    }
-
-    public function getSolucao()
-    {
-        return $this->solucao;
-    }
-
-    public function setSituacao($situacao)
-    {
-        $this->situacao = $situacao;
-    }
-
-    public function getSituacao()
-    {
-        return $this->situacao;
-    }
-
-    public function setClienteId(ClassCliente $cliente_id)
-    {
-        $this->cliente_id = $cliente_id->getClienteId();
-    }
-
-    public function getClienteId()
-    {
-        return $this->cliente_id;
-    }
-
-    public function setFuncionarioId(ClassFuncionario $funcionario_id)
-    {
-        $this->funcionario_id = $funcionario_id->getFuncionarioId();
-    }
-
-    public function getFuncionarioId()
-    {
-        $this->funcionario_id;
-    }
-
     # Métodos para abrir, cancelar, visualizar, editar e encerrar consultas
-    public function abrirConsultas($dtConsulta, $hrConsulta, $custo, $desconto, $dtAbertura, $dtEncerr, $solucao, $situacao, ClassCliente $cliente_id, ClassFuncionario $funcionario_id, $funcao_id)
-    {
-        $this->dtConsulta = $dtConsulta;
-        $this->hrConsulta = $hrConsulta;
-        $this->custo = $custo;
-        $this->desconto = $desconto;
-        $this->dtAbertura = $dtAbertura;
-        $this->dtEncerr = $dtEncerr;
-        $this->solucao = $solucao;
-        $this->situacao = $situacao;
-        $this->cliente_id = $cliente_id->getClienteId();
-        $this->funcionario_id = $funcionario_id->getFuncionarioId();
-        $this->funcao_id = $funcao_id;
+    protected function abrirConsultas($dtConsulta, $hr_inicio,$hr_final, $custo, $desconto, $problema, $situacao, $cliente_id, $funcionario_id){
+        $ultimoHor = '17'; #17=14:00:00
+        if($hr_inicio>=$ultimoHor){
+            return false;
+        }elseif($hr_final <= $hr_inicio){
+            return false;
+        }
+        $consulta_id=0; $dtAbertura=date('Y-m-d H:i:s'); $dtEncerr=null; $solucao=null;
+        $BFetch=$this->conexaoDB()->prepare("INSERT INTO consultas VALUES (:consulta_id,:dtConsulta, :hr_inicio, :hr_final, :custo, :desconto, :dtAbertura, :dtEncerr, :problema, :solucao, :situacao, :cliente_id, :funcionario_id)");
+        $BFetch->bindParam(":consulta_id", $consulta_id, \PDO::PARAM_INT);
+        $BFetch->bindParam(":dtConsulta", $dtConsulta);
+        $BFetch->bindParam(":hr_inicio", $hr_inicio, \PDO::PARAM_INT);
+        $BFetch->bindParam(":hr_final", $hr_final, \PDO::PARAM_INT);
+        $BFetch->bindParam(":custo", $custo, \PDO::PARAM_INT);
+        $BFetch->bindParam(":desconto", $desconto, \PDO::PARAM_INT);
+        $BFetch->bindParam(":dtAbertura", $dtAbertura);
+        $BFetch->bindParam(":dtEncerr", $dtEncerr);
+        $BFetch->bindParam(":problema", $problema, \PDO::PARAM_STR);
+        $BFetch->bindParam(":solucao", $solucao, \PDO::PARAM_STR);
+        $BFetch->bindParam(":situacao", $situacao, \PDO::PARAM_INT);
+        $BFetch->bindParam(":cliente_id", $cliente_id, \PDO::PARAM_INT);
+        $BFetch->bindParam(":funcionario_id", $funcionario_id, \PDO::PARAM_INT);
+        if($BFetch->execute()){ # Para obter o erro, caso houver
+            return true;
+        }else{
+            return false;
+            /*echo "<pre>";
+            print_r($BFetch->errorInfo()); //printa a mensagem de erro
+            print_r($BFetch->queryString); //printa a query*/
+        }
     }
 
-    public function cancelarConsulta($consulta_id)
-    {
+    protected function listarConsultas(){
+        $BFetch=$this->db=$this->conexaoDB()->prepare("SELECT * FROM consultas");
+        $BFetch->rowCount();
+        $BFetch->execute();
+        $i=0;
+        while ($fetch=$BFetch->fetch(\PDO::FETCH_ASSOC)){
+            $array[$i]=[
+                'consulta_id'=>$fetch['consulta_id'],
+                'dtConsulta'=>$fetch['dtConsulta'],
+                'hr_inicio'=>$fetch['hr_inicio'],
+                'hr_final'=>$fetch['hr_final'],
+                'custo'=>$fetch['custo'],
+                'desconto'=>$fetch['desconto'],
+                'dtAbertura'=>$fetch['dtAbertura'],
+                'dtEncerr'=>$fetch['dtEncerr'],
+                'problema'=>$fetch['problema'],
+                'solucao'=>$fetch['solucao'],
+                'situacao'=>$fetch['situacao'],
+                'cliente_id'=>$fetch['cliente_id'],
+                'funcionario_id'=>$fetch['funcionario_id']
+            ];
+            $i++;
+        }
+        return $array;
+    }
+
+    protected function editarConsulta($consulta_id){
 
     }
 
-    public function verConsultas($consulta_id)
-    {
+    protected function encerrarConsulta($consulta_id){
 
     }
-
-    public function editarConsulta($consulta_id)
-    {
-
-    }
-
-    public function encerrarConsulta($consulta_id)
-    {
-
+    protected function excluirConsulta($consulta_id){
+        $BFetch=$this->conexaoDB()->prepare("DELETE FROM consultas WHERE consulta_id=:consulta_id");
+        $BFetch->bindParam(":consulta_id", $consulta_id, \PDO::PARAM_INT);
+        if($BFetch->execute()):
+            return true;
+        else:
+            return false;
+        endif;
     }
 
 }
