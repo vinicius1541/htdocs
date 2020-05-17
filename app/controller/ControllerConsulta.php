@@ -178,7 +178,7 @@ class ControllerConsulta extends ClassConsulta {
                                     <div class="form-label-group text-center">
                                         <div class="custom-control custom-checkbox my-1 mr-sm-2">
                                             <input name="situacao" type="checkbox" class="custom-control-input" id="customControlInline">
-                                            <label class="custom-control-label" for="customControlInline">Situação</label>
+                                            <label class="custom-control-label" for="customControlInline">Situação pagamento</label>
                                         </div>
                                     </div>
                                 </div>
@@ -370,131 +370,131 @@ class ControllerConsulta extends ClassConsulta {
         <?php
         foreach ($consulArray as $dadosConsul){
         ?>
-            <link href="<?php echo DIRCSS . 'bootstrap.min.css' ?>" rel="stylesheet"/>
-            <link href="<?php echo DIRCSS . 'style.css' ?>" rel="stylesheet"/>
-            <link href="<?php echo DIRCSS . 'bootstrap.css' ?>" rel="stylesheet"/>
-            <body class="fundo">
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-auto col-md-auto col-lg-auto mx-auto">
-                        <div class="fundoLogado card card-signin my-5">
-                            <div class="card-body">
-                                <?php
-                                if (isset($_SESSION['status_consulta'])) :
-                                    ?>
-                                    <div class='alert alert-success'>
-                                        <p><?php echo $_SESSION['msg'];?></p>
-                                    </div>
-                                <?php endif;
-                                unset($_SESSION['status_consulta']); ?>
-                                <?php
-                                if (isset($_SESSION['erro'])) :
-                                    ?>
-                                    <div class='alert alert-danger'>
-                                        <p><?php echo $_SESSION['msg'];?></p>
-                                    </div>
-                                <?php endif;
-                                unset($_SESSION['erro']);
-                                unset($_SESSION['msg']);
+        <link href="<?php echo DIRCSS . 'bootstrap.min.css' ?>" rel="stylesheet"/>
+        <link href="<?php echo DIRCSS . 'style.css' ?>" rel="stylesheet"/>
+        <link href="<?php echo DIRCSS . 'bootstrap.css' ?>" rel="stylesheet"/>
+        <body class="fundo">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-auto col-md-auto col-lg-auto mx-auto">
+                    <div class="fundoLogado card card-signin my-5">
+                        <div class="card-body">
+                            <?php
+                            if (isset($_SESSION['status_consulta'])) :
                                 ?>
-                                <h5 class="card-title text-center">Editando consulta nº: <?php echo $dadosConsul['consulta_id'];?></h5>
-                                <form class="form-signin" action="<?php echo DIRPAGE.'consulta/editar'?>" method="POST">
-                                    <input name="consulta_id" type="hidden" value="<?php echo $dadosConsul['consulta_id'];?>">
-                                    <div class="form-group">
-                                        <div class="form-label-group">
-                                            <input value="<?php echo $dadosConsul['dtConsulta'];?>" name="dtConsulta" type="text" class="form-control" id="inputDtConsulta" placeholder="dtConsulta" autocomplete="off"  required>
-                                            <label for="inputDtConsulta">Data da Consulta</label>
-                                        </div>
+                                <div class='alert alert-success'>
+                                    <p><?php echo $_SESSION['msg'];?></p>
+                                </div>
+                            <?php endif;
+                            unset($_SESSION['status_consulta']); ?>
+                            <?php
+                            if (isset($_SESSION['erro'])) :
+                                ?>
+                                <div class='alert alert-danger'>
+                                    <p><?php echo $_SESSION['msg'];?></p>
+                                </div>
+                            <?php endif;
+                            unset($_SESSION['erro']);
+                            unset($_SESSION['msg']);
+                            ?>
+                            <h5 class="card-title text-center">Editando consulta nº: <?php echo $dadosConsul['consulta_id'];?></h5>
+                            <form class="form-signin" action="<?php echo DIRPAGE.'consulta/editar'?>" method="POST">
+                                <input name="consulta_id" type="hidden" value="<?php echo $dadosConsul['consulta_id'];?>">
+                                <div class="form-group">
+                                    <div class="form-label-group">
+                                        <input value="<?php echo $dadosConsul['dtConsulta'];?>" name="dtConsulta" type="text" class="form-control" id="inputDtConsulta" placeholder="dtConsulta" autocomplete="off"  required>
+                                        <label for="inputDtConsulta">Data da Consulta</label>
                                     </div>
-                                    <div class="form-row">
+                                </div>
+                                <div class="form-row">
 
-                                        <div class="form-group col-md-6">
-                                            <div class="form-label-group">
-                                                <select name="hr_inicio" id="inputHr_inicio" class="form-control">
-                                                    <option selected>Selecionar horário inicial</option>
-                                                    <?php
-                                                    foreach ($horarioArray as $dados_hr_inicio){
-                                                        $hr_inicio = $dados_hr_inicio['horario_id'] == $hr_inicioid ? "selected" : "";
-                                                        echo "
-                                                            <option value='$dados_hr_inicio[horario_id]' {$hr_inicio}>$dados_hr_inicio[horario]</option>
-                                                        ";
-                                                    }?>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group col-md-6">
-                                            <div class="form-label-group">
-                                                <select name="hr_final" id="inputHr_final" class="form-control">
-                                                    <option selected>Selecionar horário final</option>
-                                                    <?php
-                                                    foreach ($horarioArray as $dados_hr_final){
-                                                        $hr_final = $dados_hr_final['horario_id'] == $hr_finalid ? "selected" : "";
-                                                        echo "
-                                                            <option value='$dados_hr_final[horario_id]' {$hr_final}>$dados_hr_final[horario]</option>
-                                                        ";
-                                                    }?>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="form-group col-md-6">
-                                            <div class="form-label-group">
-                                                <input value="<?php echo $dadosConsul['custo'];?>" name="custo" type="number" class="form-control" id="inputCusto" placeholder="Custo" autocomplete="off" required>
-                                                <label for="inputCusto">Custo</label>
-                                            </div>
-                                        </div>
-                                        <div class="form-group col-md-6">
-                                            <div class="form-label-group">
-                                                <input value="<?php echo $dadosConsul['desconto'];?>" name="desconto" type="number" class="form-control" id="inputDesconto" placeholder="Desconto" autocomplete="off" required>
-                                                <label for="inputDesconto">Desconto</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="exampleFormControlTextarea1">Problema</label>
-                                        <textarea name="problema" class="form-control" id="exampleFormControlTextarea1" rows="3"><?php echo $dadosConsul['problema'];?></textarea>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="form-label-group text-center">
-                                            <div class="custom-control custom-checkbox my-1 mr-sm-2">
-                                                <input name="situacao" type="checkbox" class="custom-control-input" id="customControlInline" <?php echo $dadosConsul['situacao'] == 1 ? "checked" : "";?>>
-                                                <label class="custom-control-label" for="customControlInline">Situação pagamento</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group ">
+                                    <div class="form-group col-md-6">
                                         <div class="form-label-group">
-                                            <select name="funcionario_id" id="inputFuncionario" class="form-control">
-                                                <option value="#">Selecione o profissional</option>
+                                            <select name="hr_inicio" id="inputHr_inicio" class="form-control">
+                                                <option selected>Selecionar horário inicial</option>
                                                 <?php
-                                                foreach ($funcioArray as $dadosFuncio){
-                                                    $funcSelecionado = $dadosFuncio['funcionario_id'] == $funcionario_id ? "selected" : "";
+                                                foreach ($horarioArray as $dados_hr_inicio){
+                                                    $hr_inicio = $dados_hr_inicio['horario_id'] == $hr_inicioid ? "selected" : "";
                                                     echo "
-                                                        <option value='$dadosFuncio[funcionario_id]' {$funcSelecionado}>$dadosFuncio[nome]</option>
+                                                        <option value='$dados_hr_inicio[horario_id]' {$hr_inicio}>$dados_hr_inicio[horario]</option>
                                                     ";
-                                                }
-                                                ?>
+                                                }?>
                                             </select>
                                         </div>
                                     </div>
-
-                                    <div class="col text-center">
-                                        <a href="<?php echo DIRPAGE . 'consulta/listar'; ?>"><button type='button' class='btn btn-lg text-uppercase btn-warning'>Voltar</button></a>
-                                        <a href="<?php echo DIRPAGE . 'consulta/confirmar_encerramento/'.$dadosConsul['consulta_id'] ; ?>"><button type='button' class='btn btn-lg text-uppercase btn-outline-danger'>Encerrar</button></a>
-                                        <button name='btn-editar' type='submit' class='btn btn-lg text-uppercase btn-danger'>Atualizar</button>
+                                    <div class="form-group col-md-6">
+                                        <div class="form-label-group">
+                                            <select name="hr_final" id="inputHr_final" class="form-control">
+                                                <option selected>Selecionar horário final</option>
+                                                <?php
+                                                foreach ($horarioArray as $dados_hr_final){
+                                                    $hr_final = $dados_hr_final['horario_id'] == $hr_finalid ? "selected" : "";
+                                                    echo "
+                                                        <option value='$dados_hr_final[horario_id]' {$hr_final}>$dados_hr_final[horario]</option>
+                                                    ";
+                                                }?>
+                                            </select>
+                                        </div>
                                     </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <div class="form-label-group">
+                                            <input value="<?php echo $dadosConsul['custo'];?>" name="custo" type="number" class="form-control" id="inputCusto" placeholder="Custo" autocomplete="off" required>
+                                            <label for="inputCusto">Custo</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <div class="form-label-group">
+                                            <input value="<?php echo $dadosConsul['desconto'];?>" name="desconto" type="number" class="form-control" id="inputDesconto" placeholder="Desconto" autocomplete="off" required>
+                                            <label for="inputDesconto">Desconto</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleFormControlTextarea1">Problema</label>
+                                    <textarea name="problema" class="form-control" id="exampleFormControlTextarea1" rows="3"><?php echo $dadosConsul['problema'];?></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <div class="form-label-group text-center">
+                                        <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                                            <input name="situacao" type="checkbox" class="custom-control-input" id="customControlInline" <?php echo $dadosConsul['situacao'] == 1 ? "checked" : "";?>>
+                                            <label class="custom-control-label" for="customControlInline">Situação pagamento</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group ">
+                                    <div class="form-label-group">
+                                        <select name="funcionario_id" id="inputFuncionario" class="form-control">
+                                            <option value="#">Selecione o profissional</option>
+                                            <?php
+                                            foreach ($funcioArray as $dadosFuncio){
+                                                $funcSelecionado = $dadosFuncio['funcionario_id'] == $funcionario_id ? "selected" : "";
+                                                echo "
+                                                    <option value='$dadosFuncio[funcionario_id]' {$funcSelecionado}>$dadosFuncio[nome]</option>
+                                                ";
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
 
-                                </form>
-                            </div>
+                                <div class="col text-center">
+                                    <a href="<?php echo DIRPAGE . 'consulta/listar'; ?>"><button type='button' class='btn btn-lg text-uppercase btn-warning'>Voltar</button></a>
+                                    <a href="<?php echo DIRPAGE . 'consulta/confirmar_encerramento/'.$dadosConsul['consulta_id'] ; ?>"><button type='button' class='btn btn-lg text-uppercase btn-outline-danger'>Encerrar</button></a>
+                                    <button name='btn-editar' type='submit' class='btn btn-lg text-uppercase btn-danger'>Atualizar</button>
+                                </div>
+
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
-            <script src="<?php echo DIRJS . 'jquery.min.js' ?>"></script>
-            <script src="<?php echo DIRJS . 'bootstrap.min.js' ?>"></script>
-            <script src="<?php echo DIRJS . 'bootstrap.bundle.min.js'?>"></script>
-            </body>
+        </div>
+        <script src="<?php echo DIRJS . 'jquery.min.js' ?>"></script>
+        <script src="<?php echo DIRJS . 'bootstrap.min.js' ?>"></script>
+        <script src="<?php echo DIRJS . 'bootstrap.bundle.min.js'?>"></script>
+        </body>
         <?php
         }
     }

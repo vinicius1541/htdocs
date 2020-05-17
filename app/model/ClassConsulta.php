@@ -58,10 +58,9 @@ class ClassConsulta extends ClassConexao{
         $dtConsultaID = $this->recDtConsulta($consulta_id);
         $hr_inicioID = $this->recHrInicio($consulta_id);
         $hr_finalID = $this->recHrFinal($consulta_id);
-        if(!($hr_inicio == $hr_inicioID && $hr_final == $hr_finalID && $dtConsulta==$dtConsultaID)) { #se o horario nao for alterado
+        $funcio = $this->buscarFuncionario($consulta_id);
+        if(!($hr_inicio == $hr_inicioID && $hr_final == $hr_finalID && $dtConsulta==$dtConsultaID && $funcio == $funcionario_id)) { #se o horario nao for alterado
             foreach ($array as $horarios) {
-                echo "consultaID:";
-                echo $horarios['consulta_id'];
                 if ($consulta_id == $horarios['consulta_id']):
                     continue;
                 endif;
