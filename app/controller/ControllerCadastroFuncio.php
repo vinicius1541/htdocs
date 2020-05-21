@@ -75,7 +75,7 @@ class ControllerCadastroFuncio extends ClassFuncionario{
     public function addFuncionario(){
         $this->recebeVariaveis();
 
-        $validar = $this->verificarCadastro($this->login,$this->funcionario_id);
+        $validar = $this->verificarCadastro($this->login,$this->funcionario_id, $this->funcao_id);
         if ($validar == true) { # Quer dizer que o cadastro já existe
             $_SESSION['usuario_existe'] = true;
         } else {
@@ -208,21 +208,21 @@ class ControllerCadastroFuncio extends ClassFuncionario{
                     <div class='col-sm-auto col-md-auto col-lg-auto mx-auto'>
                         <div class='fundoLogado card card-signin my-5'>
                             <div class='card-body'>";
-            if (isset($_SESSION['sucesso'])) :
-                echo "
-                                <div class='alert alert-success'>
-                                    <p>" . $_SESSION['msg'] . "</p>
-                                </div>";
-            elseif (isset($_SESSION['erro'])) :
-                echo "
-                                <div class='alert alert-danger'>
-                                    <p>" . $_SESSION['msg'] . "</p>
-                                </div>";
-            endif;
-            unset($_SESSION['erro']);
-            unset($_SESSION['sucesso']);
-            unset($_SESSION['msg']);
-            echo "
+                                if (isset($_SESSION['sucesso'])) :
+                                    echo "
+                                                    <div class='alert alert-success'>
+                                                        <p>" . $_SESSION['msg'] . "</p>
+                                                    </div>";
+                                elseif (isset($_SESSION['erro'])) :
+                                    echo "
+                                                    <div class='alert alert-danger'>
+                                                        <p>" . $_SESSION['msg'] . "</p>
+                                                    </div>";
+                                endif;
+                                unset($_SESSION['erro']);
+                                unset($_SESSION['sucesso']);
+                                unset($_SESSION['msg']);
+                                echo "
                                 <h5 class='card-title text-center'>Editando:  $dados[nome] </h5>
                                 <form class='form-signin' action='" . DIRPAGE . 'cadastro_funcio/editar' . "' method='POST'>
                                     <input name='funcionario_id' type='hidden' value='$dados[funcionario_id]' id='inputID'>
@@ -317,10 +317,10 @@ class ControllerCadastroFuncio extends ClassFuncionario{
 
     public function editar(){
         $this->recebeVariaveis();
-        $validar = $this->verificarCadastro($this->login, $this->funcionario_id);
+        $validar = $this->verificarCadastro($this->login, $this->funcionario_id, $this->funcao_id);
         if ($validar == true) { # Quer dizer que o cadastro já existe
-            $_SESSION['erro'] = true;
-            $_SESSION['msg'] = "Sinto muito, <br>usuario inserido já existe :(";
+            header('Location: ' . DIRPAGE . 'cadastro_funcio/editando/' . $this->funcionario_id);
+            exit();
         } else {
             $ok = $this->editarFuncionario($this->funcionario_id, $this->nome, $this->cpf, $this->rg, $this->celular, $this->email, $this->endereco, $this->funcao_id, $this->nivelacesso_id);
             if ($ok): # Verificando se o update da tabela funcionarios deu certo

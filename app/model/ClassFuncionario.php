@@ -1,26 +1,61 @@
 <?php
 namespace App\Model;
-use \App\Model\ClassUsuario;
-use App\Model\ClassConexao;
 class ClassFuncionario extends ClassConexao{
     private $db;
     use \Src\Traits\TraitUrlParser;
 
     # Método que irá verificar se o cadastro já existe
-    protected function verificarCadastro($login, $funcionario_id){
-        if(empty($funcionario_id)):
-            $BFetch=$this->conexaoDB()->prepare("SELECT login FROM usuarios WHERE login=:login");
-        else:
-            $BFetch=$this->conexaoDB()->prepare("SELECT login FROM usuarios WHERE login=:login AND funcionario_id!=:funcionario_id");
-            $BFetch->bindParam(":funcionario_id", $funcionario_id, \PDO::PARAM_INT);
-        endif;
-        $BFetch->bindParam(":login", $login, \PDO::PARAM_STR);
-        $BFetch->execute();
-        if($row = $BFetch->rowCount()>0){ # Se usuário existir, retorna TRUE
-            return true;
-        }else{
-            return false;
+    protected function verificarCadastro($login, $funcionario_id, $funcao_id){
+        if($this->verificarFuncionario($funcionario_id)){ # se retornar true(dizendo que o funcionario tem consultas marcadas
+            if(!empty($funcao_id)){ # se o atributo funcao_id existir
+                $BFetch = $this->conexaoDB()->prepare("SELECT * FROM funcionarios WHERE funcionario_id=:funcionario_id");
+                $BFetch->bindParam(":funcionario_id", $funcionario_id, \PDO::PARAM_INT);
+                $BFetch->execute();
+                $funcao=$BFetch->fetch(\PDO::FETCH_ASSOC);
+                if($funcao['funcao_id'] == $funcao_id){ #se a funcao do funcionario for a mesmo que existe no banco, entao pular
+                    goto verificandoUsuario;
+                }
+                if($this->verificarFuncionario($funcionario_id)){
+                    echo "VERIFICANDO DE NOVO SE FUNCIONARIO JA TEM CONSULTAS<br>";
+                    $_SESSION['erro'] = true;
+                    $_SESSION['msg'] = "Este funcionário nao pode ser editado, <br>pois o mesmo tem consultas abertas!";
+                    return true;
+                }
+            }
+            goto verificandoUsuario;
         }
+        verificandoUsuario:
+        # Verificando se o usuario digitado existe
+        if(empty($funcionario_id)):
+            $BFetch1=$this->conexaoDB()->prepare("SELECT * FROM usuarios WHERE login=:login");
+        else:
+            $BFetch1=$this->conexaoDB()->prepare("SELECT * FROM usuarios WHERE login=:login AND funcionario_id!=:funcionario_id");
+            $BFetch1->bindParam(":funcionario_id", $funcionario_id, \PDO::PARAM_INT);
+        endif;
+        $BFetch1->bindParam(":login", $login, \PDO::PARAM_STR);
+        $BFetch1->execute();
+
+        $i = 0;
+        while ($fetch=$BFetch1->fetch(\PDO::FETCH_ASSOC)) {
+            $array[$i] = [
+                'funcionario_id' => $fetch['funcionario_id']
+            ];
+            $i++;
+        }
+
+        foreach ($array as $funcio){
+            if($funcio['funcionario_id'] == $funcionario_id){
+                continue;
+            }
+            if($row = $BFetch1->rowCount()>0){ # Se usuário existir, retorna TRUE
+                $_SESSION['erro'] = true;
+                $_SESSION['msg'] = "Sinto muito, usuario inserido já existe :(";
+                return true;
+            }else{
+                return false;
+            }
+        }
+        return false;
     }
     # Método para salvar cadastro do funcionário com acesso ao bd
     protected function salvarFuncionario($nome,$cpf,$rg,$celular,$email,$endereco,$funcao_id, $nivelacesso_id){
@@ -130,17 +165,6 @@ class ClassFuncionario extends ClassConexao{
         $BFetch->bindParam(":ativo", $ativo, \PDO::PARAM_INT);
         $BFetch->bindParam(":dtSaida", $dtSaida);
 
-        /*echo "id: ". $funcionario_id . "<br>";
-        echo "nome: ". $nome . "<br>";
-        echo "cpf: ". $cpf . "<br>";
-        echo "rg: ". $rg . "<br>";
-        echo "celular: ". $celular . "<br>";
-        echo "email: ". $email . "<br>";
-        echo "endereco: ". $endereco . "<br>";
-        echo "funcaoid: ". $funcao_id . "<br>";
-        echo "nivelacessoid: ". $nivelacesso_id . "<br>";
-        echo "ativo: ". $ativo . "<br>";*/
-
         if($BFetch->execute()):
             return true;
         else:
@@ -155,5 +179,15 @@ class ClassFuncionario extends ClassConexao{
         else:
             return false;
         endif;
+    }
+    protected function verificarFuncionario($funcionario_id){
+        $BFetch=$this->conexaoDB()->prepare("SELECT * FROM consultas WHERE funcionario_id=:funcionario_id");
+        $BFetch->bindParam(":funcionario_id", $funcionario_id, \PDO::PARAM_INT);
+        $BFetch->execute();
+        if($row = $BFetch->rowCount()>0){ # Se existir consulta desse funcionario, retorna TRUE
+            return true;
+        }else{
+            return false;
+        }
     }
 }
