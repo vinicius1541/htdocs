@@ -10,15 +10,17 @@
                             <p>Cadastro concluido com sucesso!</p>
                         </div>
                     <?php endif;
-                    unset($_SESSION['status_cadastro']); ?>
-                    <?php
                     if (isset($_SESSION['usuario_existe'])) :
                         ?>
                         <div class='alert alert-danger'>
                             <p>Usuario escolhido já existe. Informe outro e tente novamente.</p>
                         </div>
                     <?php endif;
-                    unset($_SESSION['usuario_existe']); ?>
+                    unset($_SESSION['usuario_existe']);
+                    unset($_SESSION['status_cadastro']);
+                    unset($_SESSION['erro']);
+                    unset($_SESSION['msg']);
+                    ?>
                     <h5 class="card-title text-center">Cadastrar usuário</h5>
                     <form class="form-signin" action="<?php echo DIRPAGE.'cadastro_funcio/addFuncionario'?>" method="POST">
                         <div class="form-group">

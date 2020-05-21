@@ -75,7 +75,7 @@ class ControllerCadastroFuncio extends ClassFuncionario{
     public function addFuncionario(){
         $this->recebeVariaveis();
 
-        $validar = $this->verificarCadastro($this->login,$this->funcionario_id);
+        $validar = $this->verificarCadastro($this->login,$this->funcionario_id, $this->funcao_id);
         if ($validar == true) { # Quer dizer que o cadastro já existe
             $_SESSION['usuario_existe'] = true;
         } else {
@@ -317,10 +317,10 @@ class ControllerCadastroFuncio extends ClassFuncionario{
 
     public function editar(){
         $this->recebeVariaveis();
-        $validar = $this->verificarCadastro($this->login, $this->funcionario_id);
+        $validar = $this->verificarCadastro($this->login, $this->funcionario_id, $this->funcao_id);
         if ($validar == true) { # Quer dizer que o cadastro já existe
-            $_SESSION['erro'] = true;
-            $_SESSION['msg'] = "Sinto muito, <br>usuario inserido já existe :(";
+            header('Location: ' . DIRPAGE . 'cadastro_funcio/editando/' . $this->funcionario_id);
+            exit();
         } else {
             $ok = $this->editarFuncionario($this->funcionario_id, $this->nome, $this->cpf, $this->rg, $this->celular, $this->email, $this->endereco, $this->funcao_id, $this->nivelacesso_id);
             if ($ok): # Verificando se o update da tabela funcionarios deu certo

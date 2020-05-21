@@ -160,13 +160,13 @@ class ControllerConsulta extends ClassConsulta {
                                     <div class="form-group col-md-6">
                                         <div class="form-label-group">
                                             <input name="desconto" type="number" class="form-control" id="inputDesconto" placeholder="Desconto" autocomplete="off" required>
-                                            <label for="inputDesconto">Desconto</label>
+                                            <label for="inputDesconto">Desconto em %</label>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="form-label-group">
-                                        <textarea name="problema" class="form-control" id="inputProblema" placeholder="Problema" required></textarea>
+                                        <textarea name="problema" class="form-control" id="inputProblema" placeholder="Tratamento" required></textarea>
                                     </div>
                                 </div><!--
                                 <div class="form-group">
@@ -297,7 +297,7 @@ class ControllerConsulta extends ClassConsulta {
                         <th scope='col'>Profissional</th>
                         <th scope='col'>Data Consulta</th>
                         <th scope='col'>Hora</th>
-                        <th scope='col'>Problema</th>
+                        <th scope='col'>Tratamento</th>
                         <th scope='col'>Custo</th>
                         <th scope='col'>Situação</th>
                     </tr>
@@ -322,17 +322,21 @@ class ControllerConsulta extends ClassConsulta {
                     }
                     $situation = "$dados[situacao]";
                     $this->situacao = !(empty($dados['dtEncerr'])) ? "<strong style='color:red'>Encerrado</strong>" : ($this->situacao = $situation == 1 ? "<strong style='color:lightgreen'>Pago</strong>" : "<strong style='color:lightcoral'>Pendente</strong>");
-
                     $this->dtConsulta = date('d/m/Y', strtotime("$dados[dtConsulta]"));
-
-                    echo "<tr>
+                    if($dados['desconto'] > 0){
+                        $desconto = ($dados['custo'] * $dados['desconto'])/100;
+                        $dados['custo'] = round($dados['custo'] - $desconto);
+                    }
+                    $temDesconto = $dados['desconto'] > 0 && $dados['desconto'] < 100 ? "<strong style='color:yellow'>($dados[desconto]% desconto)</strong>" : "";
+                    $valor = $dados['custo'] == 0 ? "<strong style='color:limegreen'>Grátis</strong>" : "R$$dados[custo],00";
+                    echo "<tr class='text-center'>
                         <th scope='row'>$dados[consulta_id]</th>
                         <td>{$this->clienteNome}</td>
                         <td>{$this->funcioNome}</td>
                         <td>{$this->dtConsulta}</td>
                         <td>{$this->horarioInicio}</td>
                         <td>$dados[problema]</td>
-                        <td>R$$dados[custo],00</td>
+                        <td>$valor$temDesconto</td>
                         <td>{$this->situacao}</td>
                         
                         <td>
@@ -447,13 +451,13 @@ class ControllerConsulta extends ClassConsulta {
                                     <div class="form-group col-md-6">
                                         <div class="form-label-group">
                                             <input value="<?php echo $dadosConsul['desconto'];?>" name="desconto" type="number" class="form-control" id="inputDesconto" placeholder="Desconto" autocomplete="off" required>
-                                            <label for="inputDesconto">Desconto</label>
+                                            <label for="inputDesconto">Desconto em %</label>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleFormControlTextarea1">Problema</label>
-                                    <textarea name="problema" class="form-control" id="exampleFormControlTextarea1" rows="3"><?php echo $dadosConsul['problema'];?></textarea>
+                                    <label for="problema">Tratamento</label>
+                                    <textarea name="problema" class="form-control" id="problema" rows="3"><?php echo $dadosConsul['problema'];?></textarea>
                                 </div>
                                 <div class="form-group">
                                     <div class="form-label-group text-center">
@@ -465,7 +469,7 @@ class ControllerConsulta extends ClassConsulta {
                                 </div>
                                 <div class="form-group ">
                                     <div class="form-label-group">
-                                        <select name="funcionario_id" id="inputFuncionario" class="form-control">
+                                        <select id="funcionario_id" name="funcionario_id" id="inputFuncionario" class="form-control">
                                             <option value="#">Selecione o profissional</option>
                                             <?php
                                             foreach ($funcioArray as $dadosFuncio){
@@ -577,7 +581,7 @@ class ControllerConsulta extends ClassConsulta {
                         </button></a>
                     </div>
                     <div style='color: darkred;outline: none' class='modal-body'>
-                        <strong>Coloque abaixo a solução do problema.</strong>
+                        <strong>Coloque abaixo a solução do tratamento.</strong>
                         <form class='form-signin' action='". DIRPAGE. 'consulta/encerrar' . "' method='POST'>
                             <input name='consulta_id' type='hidden' value='". $consulta_id ."'>
                             <div class='form-group'>
@@ -602,18 +606,24 @@ class ControllerConsulta extends ClassConsulta {
     # Método que irá encerrar a consulta
     public function encerrar(){
         $this->recebeVariaveis();
-        var_dump($this->consulta_id); echo "<br>";
-        var_dump($this->solucao);
-        $C = $this->encerrarConsulta($this->consulta_id, $this->solucao);
-        if($C):
-            $_SESSION['sucesso'] = true;
-            $_SESSION['msg'] = "Consulta encerrada com sucesso!";
-        else:
+        $situacaoPag = $this->verificarPagamento($this->consulta_id);
+        if($situacaoPag == 1){
+            $C = $this->encerrarConsulta($this->consulta_id, $this->solucao);
+            if($C):
+                $_SESSION['sucesso'] = true;
+                $_SESSION['msg'] = "Consulta encerrada com sucesso!";
+            else:
+                $_SESSION['erro'] = true;
+                $_SESSION['msg'] = "Sinto muito, ocorreu um erro ao tentar encerrar a consulta :(";
+            endif;
+            header('Location: ' . DIRPAGE . 'consulta/listar');
+            exit();
+        }else{
             $_SESSION['erro'] = true;
-            $_SESSION['msg'] = "Sinto muito, ocorreu um erro ao tentar encerrar a consulta :(";
-        endif;
-        header('Location: ' . DIRPAGE . 'consulta/listar');
-        exit();
+            $_SESSION['msg'] = "<strong class='text-center'>Para que a consulta seja encerrada o <br>pagamento deve ser efetuado</strong>";
+            header('Location: ' . DIRPAGE . 'consulta/editando/' . $this->consulta_id);
+            exit();
+        }
     }
     # Método que irá excluir definitivamente a consulta
     public function excluir($consulta_id){

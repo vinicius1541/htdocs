@@ -4,10 +4,6 @@
 namespace App\Model;
 namespace App\Model;
 
-use App\Model\ClassFuncionario;
-use App\Model\ClassCliente;
-use App\Model\ClassConexao;
-
 class ClassConsulta extends ClassConexao{
     private $db;
     use \Src\Traits\TraitUrlParser;
@@ -64,10 +60,8 @@ class ClassConsulta extends ClassConexao{
                 if ($consulta_id == $horarios['consulta_id']):
                     continue;
                 endif;
-
                 $hr_inicialid = $horarios['hr_inicio'];
                 $hr_finalid = $horarios['hr_final'];
-
                 if ($hr_final >= $hr_inicialid && ($hr_final < $hr_finalid || $hr_final >= $hr_finalid)) {
                     if (($hr_inicio >= $hr_inicialid && $hr_inicio < $hr_finalid)) {
                         $_SESSION['erro'] = true;
@@ -84,6 +78,8 @@ class ClassConsulta extends ClassConexao{
                     return false;
                 }
             }
+        }else{
+            return false;
         }
     }
     # Métodos para abrir, cancelar, visualizar, editar e encerrar consultas
@@ -146,7 +142,11 @@ class ClassConsulta extends ClassConexao{
     }
     # Método para editar a consulta
     protected function editarConsulta($consulta_id, $dtConsulta, $hr_inicio,$hr_final,$custo,$desconto,$problema,$situacao, $funcionario_id){
-
+        if($desconto>100){
+            $desconto = 100;
+        }elseif($desconto<0){
+            $desconto = 0;
+        }
         $BFetch=$this->conexaoDB()->prepare("UPDATE consultas SET dtConsulta=:dtConsulta, hr_inicio=:hr_inicio, hr_final=:hr_final, custo=:custo,desconto=:desconto, problema=:problema, situacao=:situacao, funcionario_id=:funcionario_id WHERE consulta_id=:consulta_id");
         $BFetch->bindParam(":consulta_id", $consulta_id, \PDO::PARAM_INT);
         $BFetch->bindParam(":dtConsulta", $dtConsulta);
@@ -251,5 +251,13 @@ class ClassConsulta extends ClassConexao{
         endif;
         return $dtConsulta;
     }
-
+    protected function verificarPagamento($consulta_id){
+        $BFetch = $this->conexaoDB()->prepare("SELECT * FROM consultas WHERE consulta_id=:consulta_id");
+        $BFetch->bindParam(":consulta_id", $consulta_id, \PDO::PARAM_INT);
+        if($BFetch->execute()):
+            $situacao=$BFetch->fetch( \PDO::FETCH_ASSOC );
+            $situacaoPagamento = $situacao['situacao'];
+        endif;
+        return $situacaoPagamento;
+    }
 }
