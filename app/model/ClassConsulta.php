@@ -120,6 +120,7 @@ class ClassConsulta extends ClassConexao{
         $BFetch->rowCount();
         $BFetch->execute();
         $i=0;
+        $array = null;
         while ($fetch=$BFetch->fetch(\PDO::FETCH_ASSOC)){
             $array[$i]=[
                 'consulta_id'=>$fetch['consulta_id'],

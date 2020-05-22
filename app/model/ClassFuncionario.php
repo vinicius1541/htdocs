@@ -79,11 +79,11 @@ class ClassFuncionario extends ClassConexao{
     }
     # Listar Funcionários
     protected function listarFuncionario(){
-        $BFetch=$this->db=$this->conexaoDB()->prepare("SELECT * FROM usuarios u INNER JOIN funcionarios f ON u.funcionario_id=f.funcionario_id");
-        #$BFetch->bindParam(":funcionario_id", $funcionario_id, \PDO::PARAM_STR);
+        $BFetch=$this->db=$this->conexaoDB()->prepare("SELECT * FROM funcionarios f INNER JOIN usuarios u on f.funcionario_id=u.funcionario_id AND u.login!='admin'");
         $BFetch->rowCount();
         $BFetch->execute();
         $i=0;
+        $array=null;
         while ($fetch=$BFetch->fetch(\PDO::FETCH_ASSOC)){
             $array[$i]=[
                 'funcionario_id'=>$fetch['funcionario_id'],
@@ -105,11 +105,12 @@ class ClassFuncionario extends ClassConexao{
         return $array;
     }
     public function listarDentistas(){
-        $BFetch=$this->db=$this->conexaoDB()->prepare("SELECT * FROM funcionarios WHERE funcao_id=2");
+        $BFetch=$this->db=$this->conexaoDB()->prepare("SELECT * FROM funcionarios f INNER JOIN usuarios u ON f.funcionario_id=u.funcionario_id AND funcao_id=2 AND u.login!='admin'");
         #$BFetch->bindParam(":funcionario_id", $funcionario_id, \PDO::PARAM_STR);
         $BFetch->rowCount();
         $BFetch->execute();
         $i=0;
+        $array=null;
         while ($fetch=$BFetch->fetch(\PDO::FETCH_ASSOC)){
             $array[$i]=[
                 'funcionario_id'=>$fetch['funcionario_id'],

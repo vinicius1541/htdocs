@@ -59,6 +59,7 @@ class ClassCliente extends ClassConexao{
         $BFetch->rowCount();
         $BFetch->execute();
         $i=0;
+        $array=null;
         while ($fetch=$BFetch->fetch(\PDO::FETCH_ASSOC)){
             $array[$i]=[
                 'cliente_id'=>$fetch['cliente_id'],

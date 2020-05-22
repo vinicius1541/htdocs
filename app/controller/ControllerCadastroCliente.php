@@ -79,7 +79,7 @@ class ControllerCadastroCliente extends ClassCliente{
     public function listar(){
         $this->recebeVariaveis();
         $Array = $this->listarClientes();
-
+        if($Array!=null):
         echo "
         <link href='" . DIRCSS . 'bootstrap.min.css' . "' rel='stylesheet'/>
         <link href='" . DIRCSS . 'style.css' . "' rel='stylesheet'/>
@@ -147,6 +147,28 @@ class ControllerCadastroCliente extends ClassCliente{
         <script src='" . DIRJS . 'bootstrap.bundle.min.js' . "'></script>
         </body>
         ";
+        else:
+            ?>
+            <link href="<?php echo DIRCSS . 'bootstrap.min.css' ?>" rel="stylesheet"/>
+            <link href="<?php echo DIRCSS . 'style.css' ?>" rel="stylesheet"/>
+            <link href="<?php echo DIRCSS . 'bootstrap.css' ?>" rel="stylesheet"/>
+            <body class="fundo">
+
+            <?php
+            unset($_SESSION['erro']);
+            unset($_SESSION['sucesso']);
+            unset($_SESSION['msg']);
+            echo "<h1 style='color: darkred;' class='text-center'>Sem clientes no momento, cadastre algum e logo aparecerá aqui! :)</h1>";
+            echo "
+            <div class='col text-center'>
+                <a href='" . DIRPAGE . 'home' . "'><button type='button' class='btn btn-warning btn-lg text-uppercase'>Voltar</button></a>
+                <a href='" . DIRPAGE . 'cadastro_cliente' . "'><button type='button' class='btn btn-primary btn-lg text-uppercase'>Cadastrar Cliente</button></a><br>
+            </div>
+            <script src='" . DIRJS . 'jquery.min.js' . "'></script>
+            <script src='" . DIRJS . 'bootstrap.min.js' . "'></script>
+            <script src='" . DIRJS . 'bootstrap.bundle.min.js' . "'></script>
+            </body>";
+        endif;
     }
 
     # Método que irá abrir a tela de ediçao do cliente solicitado
