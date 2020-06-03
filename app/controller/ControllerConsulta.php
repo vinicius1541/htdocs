@@ -185,26 +185,35 @@ class ControllerConsulta extends ClassConsulta {
                                 <div class="form-group ">
                                     <div class="form-label-group">
                                         <select name="cliente_id" id="inputCliente" class="form-control">
-                                            <option selected>Selecione o cliente</option>
                                             <?php
-                                            foreach ($clienteArray as $dadosCliente){
-                                                echo "
+                                            if(!($clienteArray==null)){
+                                                echo '<option selected>Selecione o cliente</option>';
+                                                foreach ($clienteArray as $dadosCliente){
+                                                    echo "
                                                 <option value='$dadosCliente[cliente_id]'>$dadosCliente[cli_nome]</option>
                                                 ";
-                                            }?>
+                                                }
+                                            }else{
+                                                echo "<option>Nao há clientes cadastrados!</option>";
+                                            }
+                                            ?>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-group ">
                                     <div class="form-label-group">
                                         <select name="funcionario_id" id="inputFuncionario" class="form-control">
-                                            <option value="#">Selecione o profissional</option>
                                             <?php
-                                                foreach ($funcioArray as $dadosFuncio){
+                                            if(!($funcioArray==null)) {
+                                                echo '<option value="#">Selecione o profissional</option>';
+                                                foreach ($funcioArray as $dadosFuncio) {
                                                     echo "
                                                     <option value='$dadosFuncio[funcionario_id]'>$dadosFuncio[nome]</option>
                                                     ";
                                                 }
+                                            }else{
+                                                echo "<option>Nao há dentistas cadastrados!</option>";
+                                            }
                                             ?>
                                         </select>
                                     </div>
@@ -258,13 +267,17 @@ class ControllerConsulta extends ClassConsulta {
     }
     public function listar(){
         $this->recebeVariaveis();
-        $Array = $this->listarConsultas();
+        if(isset($this->funcionario_id) && $this->funcionario_id!='0'){
+            $Array = $this->listarConsultasByFunc($this->funcionario_id);
+        }else{
+            $Array = $this->listarConsultas();
+        }
         $cliente = new ClassCliente();
         $clienteArray = $cliente->listarClientes(); # listar todos os clientes cadastrados
         $funcio = new ClassFuncionario();
         $funcioArray = $funcio->listarDentistas(); # listar funcionários(que sao dentistas
         $horarioArray = $this->listarHorarios(); # listar todos os horários na combo-box
-
+        if($Array!=null):
         ?>
         <link href="<?php echo DIRCSS . 'bootstrap.min.css' ?>" rel="stylesheet"/>
         <link href="<?php echo DIRCSS . 'style.css' ?>" rel="stylesheet"/>
@@ -288,6 +301,7 @@ class ControllerConsulta extends ClassConsulta {
             unset($_SESSION['sucesso']);
             unset($_SESSION['msg']);
             ?>
+
             <div class='tabelaFunc table-responsive'>
                 <table class='table table-hover table-dark table-striped table-bordered'>
                     <thead class='thead-dark '>
@@ -352,14 +366,59 @@ class ControllerConsulta extends ClassConsulta {
                 </table>
                 <div class='col text-center'>
                     <a href='" . DIRPAGE . 'home' . "'><button type='button' class='btn btn-warning btn-lg text-uppercase'>Voltar</button></a>
-                    <a href='" . DIRPAGE . 'consulta' . "'><button type='button' class='btn btn-primary btn-lg text-uppercase'>Calendário</button></a><br>
+                    <a href='" . DIRPAGE . 'consulta' . "'><button type='button' class='btn btn-primary btn-lg text-uppercase'>Calendário</button></a>
                 </div>
-            </div>
+            </div>";
+                ?>
+                <form action="<?php echo DIRPAGE.'consulta/listar'?>" method="POST">
+                    <div class="form-row">
+                        <div class="col-auto my-1">
+                            <select id="funcionario_id" name="funcionario_id" class="custom-select mr-sm-2" id="inlineFormCustomSelect">
+                                <option value="0" selected>Selecione o profissional</option>
+                                <?php
+                                foreach ($funcioArray as $dadosFuncio){
+                                    $funcSelecionado = $dadosFuncio['funcionario_id'] == $funcionario_id ? "selected" : "";
+                                    echo " <option value='$dadosFuncio[funcionario_id]' {$funcSelecionado}>$dadosFuncio[nome]</option>
+                                    ";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="col-auto my-1">
+                            <button type="submit" class="btn btn-primary">Listar consultas</button>
+                        </div>
+                    </div>
+                </form>
+
+                <?php
+                echo "            
             <script src='" . DIRJS . 'jquery.min.js' . "'></script>
             <script src='" . DIRJS . 'bootstrap.min.js' . "'></script>
             <script src='" . DIRJS . 'bootstrap.bundle.min.js' . "'></script>
         </body>
         ";
+        else:
+            ?>
+            <link href="<?php echo DIRCSS . 'bootstrap.min.css' ?>" rel="stylesheet"/>
+            <link href="<?php echo DIRCSS . 'style.css' ?>" rel="stylesheet"/>
+            <link href="<?php echo DIRCSS . 'bootstrap.css' ?>" rel="stylesheet"/>
+            <body class="fundo">
+
+            <?php
+            unset($_SESSION['erro']);
+            unset($_SESSION['sucesso']);
+            unset($_SESSION['msg']);
+            echo "<h1 style='color: darkred;' class='text-center'>Sem consultas no momento, cadastre alguma e logo aparecerá aqui! :)</h1>";
+            echo "
+            <div class='col text-center'>
+                <a href='" . DIRPAGE . 'home' . "'><button type='button' class='btn btn-warning btn-lg text-uppercase'>Voltar</button></a>
+                <a href='" . DIRPAGE . 'consulta' . "'><button type='button' class='btn btn-primary btn-lg text-uppercase'>Calendário</button></a><br>
+            </div>
+            <script src='" . DIRJS . 'jquery.min.js' . "'></script>
+            <script src='" . DIRJS . 'bootstrap.min.js' . "'></script>
+            <script src='" . DIRJS . 'bootstrap.bundle.min.js' . "'></script>
+            </body>";
+        endif;
     }
 
     public function editando($consulta_id){

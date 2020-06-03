@@ -93,12 +93,12 @@ class ControllerCadastroFuncio extends ClassFuncionario{
     public function listar(){
         $this->recebeVariaveis();
         $Array = $this->listarFuncionario();
-
+        if($Array!=null):
         echo "
         <link href='" . DIRCSS . 'bootstrap.min.css' . "' rel='stylesheet'/>
         <link href='" . DIRCSS . 'style.css' . "' rel='stylesheet'/>
         <link href='" . DIRCSS . 'bootstrap.css' . "' rel='stylesheet'/>
-        <body class='fundoLogado'>";
+        <body class='fundo'>";
             if (isset($_SESSION['sucesso'])):
                 echo "
             <div class='alert alert-success'>
@@ -170,6 +170,28 @@ class ControllerCadastroFuncio extends ClassFuncionario{
         <script src='" . DIRJS . 'bootstrap.bundle.min.js' . "'></script>
         </body>
         ";
+        else:
+        ?>
+        <link href="<?php echo DIRCSS . 'bootstrap.min.css' ?>" rel="stylesheet"/>
+        <link href="<?php echo DIRCSS . 'style.css' ?>" rel="stylesheet"/>
+        <link href="<?php echo DIRCSS . 'bootstrap.css' ?>" rel="stylesheet"/>
+        <body class="fundo">
+
+        <?php
+        unset($_SESSION['erro']);
+        unset($_SESSION['sucesso']);
+        unset($_SESSION['msg']);
+        echo "<h1 style='color: darkred;' class='text-center'>Sem funcionários no momento, cadastre algum e logo aparecerá aqui! :)</h1>";
+        echo "
+            <div class='col text-center'>
+                <a href='" . DIRPAGE . 'home' . "'><button type='button' class='btn btn-warning btn-lg text-uppercase'>Voltar</button></a>
+                <a href='" . DIRPAGE . 'cadastro_funcio' . "'><button type='button' class='btn btn-primary btn-lg text-uppercase'>Cadastrar</button></a><br>                
+            </div>
+            <script src='" . DIRJS . 'jquery.min.js' . "'></script>
+            <script src='" . DIRJS . 'bootstrap.min.js' . "'></script>
+            <script src='" . DIRJS . 'bootstrap.bundle.min.js' . "'></script>
+            </body>";
+        endif;
     }
 
     # Método que irá abrir a tela de ediçao do funcionário solicitado
@@ -378,20 +400,25 @@ class ControllerCadastroFuncio extends ClassFuncionario{
     public function excluir($funcionario_id){
         $this->recebeVariaveis();
         $this->usuario = new ClassUsuario();
-        $U = $this->usuario->excluirUsuario($funcionario_id);
-        if($U):
-            $F = $this->excluirFuncionario($funcionario_id);
-            if($F):
-                $_SESSION['sucesso'] = true;
-                $_SESSION['msg'] = "Funcionario/Usuario excluídos com sucesso!";
+        if(!($this->verificarFuncionario($funcionario_id))){
+            $U = $this->usuario->excluirUsuario($funcionario_id);
+            if($U):
+                $F = $this->excluirFuncionario($funcionario_id);
+                if($F):
+                    $_SESSION['sucesso'] = true;
+                    $_SESSION['msg'] = "Funcionario/Usuario excluídos com sucesso!";
+                else:
+                    $_SESSION['erro'] = true;
+                    $_SESSION['msg'] = "Sinto muito, ocorreu um erro ao tentar atualizar o funcionário :(";
+                endif;
             else:
                 $_SESSION['erro'] = true;
-                $_SESSION['msg'] = "Sinto muito, ocorreu um erro ao tentar atualizar o funcionário :(";
+                $_SESSION['msg'] = "Sinto muito, ocorreu um erro ao tentar atualizar o usuário :(";
             endif;
-        else:
+        }else{
             $_SESSION['erro'] = true;
-            $_SESSION['msg'] = "Sinto muito, ocorreu um erro ao tentar atualizar o usuário :(";
-        endif;
+            $_SESSION['msg'] = "Funcionário nao pode ser apagado pois o mesmo tem consultas marcadas, delete a consulta ou troque o responsável por ela!";
+        }
         header('Location: ' . DIRPAGE . 'cadastro_funcio/listar');
         exit();
     }

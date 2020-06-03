@@ -117,9 +117,36 @@ class ClassConsulta extends ClassConexao{
 
     protected function listarConsultas(){
         $BFetch=$this->db=$this->conexaoDB()->prepare("SELECT * FROM consultas");
-        $BFetch->rowCount();
         $BFetch->execute();
         $i=0;
+        $array = null;
+        while ($fetch=$BFetch->fetch(\PDO::FETCH_ASSOC)){
+            $array[$i]=[
+                'consulta_id'=>$fetch['consulta_id'],
+                'dtConsulta'=>$fetch['dtConsulta'],
+                'hr_inicio'=>$fetch['hr_inicio'],
+                'hr_final'=>$fetch['hr_final'],
+                'custo'=>$fetch['custo'],
+                'desconto'=>$fetch['desconto'],
+                'dtAbertura'=>$fetch['dtAbertura'],
+                'dtEncerr'=>$fetch['dtEncerr'],
+                'problema'=>$fetch['problema'],
+                'solucao'=>$fetch['solucao'],
+                'situacao'=>$fetch['situacao'],
+                'cliente_id'=>$fetch['cliente_id'],
+                'funcionario_id'=>$fetch['funcionario_id']
+            ];
+            $i++;
+        }
+        return $array;
+    }
+    protected function listarConsultasByFunc($funcionario_id){
+        $i=0;
+        $BFetch=$this->db=$this->conexaoDB()->prepare("SELECT * FROM consultas WHERE funcionario_id=:funcionario_id");
+        $BFetch->bindParam(":funcionario_id", $funcionario_id, \PDO::PARAM_INT);
+        $BFetch->execute();
+
+        $array = null;
         while ($fetch=$BFetch->fetch(\PDO::FETCH_ASSOC)){
             $array[$i]=[
                 'consulta_id'=>$fetch['consulta_id'],
