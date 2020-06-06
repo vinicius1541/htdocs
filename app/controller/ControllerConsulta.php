@@ -120,6 +120,7 @@ class ControllerConsulta extends ClassConsulta {
                                         <input name="dtConsulta" type="text" class="form-control" id="inputDtConsulta" placeholder="dtConsulta" autocomplete="off" value="<?php echo $dtConsulta;?>" required>
                                         <label for="inputDtConsulta">Data da Consulta</label>
                                     </div>
+
                                 </div>
                                 <div class="form-row">
 
@@ -399,6 +400,7 @@ class ControllerConsulta extends ClassConsulta {
         ";
         else:
             ?>
+            <meta http-equiv="refresh" content="5;url=<?php echo DIRPAGE . 'consulta/listar';?>">
             <link href="<?php echo DIRCSS . 'bootstrap.min.css' ?>" rel="stylesheet"/>
             <link href="<?php echo DIRCSS . 'style.css' ?>" rel="stylesheet"/>
             <link href="<?php echo DIRCSS . 'bootstrap.css' ?>" rel="stylesheet"/>
@@ -418,6 +420,7 @@ class ControllerConsulta extends ClassConsulta {
             <script src='" . DIRJS . 'bootstrap.min.js' . "'></script>
             <script src='" . DIRJS . 'bootstrap.bundle.min.js' . "'></script>
             </body>";
+            $_POST['funcionario_id']=0;
         endif;
     }
 
