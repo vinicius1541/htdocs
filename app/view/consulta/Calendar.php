@@ -24,7 +24,11 @@ if ($timestamp === false) {
 
 // Today
 $today = date('Y-m-j', time());
-
+$todayExplode = explode("-", rtrim($today),FILTER_SANITIZE_URL);
+if($todayExplode[2]<10){
+    $todayExplode[2] = '0'.$todayExplode[2];
+    $today = $todayExplode[0]. '-'. $todayExplode[1].'-'.$todayExplode[2];
+}
 // Título do calendário
 $calendar = strtoupper(date('M / Y', $timestamp));
 
@@ -63,7 +67,6 @@ for ($day = 1; $day <= $day_count; $day++, $str++) {  // adiciona datas com form
         $date = $ym;
         $dateAtual=$ym . '-' . $day;
     }
-
     if ($today == $dateAtual) {  //verifica se é o dia atual e se for, marca em amarelo
         $week .= '<td class="today"><a style="text-decoration: none;color: inherit" href="' . DIRPAGE . "consulta/cadastro/" . $implodeArray . '-' . $day. '"><h6 class="diatabela">' . $day . '</h6></a>';
     } else {
