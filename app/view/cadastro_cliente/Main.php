@@ -48,6 +48,7 @@
                                 <div class="form-label-group">
                                     <input name="cli_cep" type="number" class="form-control" id="inputCEP" placeholder="CEP" autocomplete="off" required>
                                     <label for="inputCEP">CEP</label>
+                                    <!--<script> document.getElementById("inputCEP").innerHTML = cepLogradouro(); </script>-->
                                 </div>
                             </div>
                             <div class="form-group col-md-6">
