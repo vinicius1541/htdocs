@@ -19,16 +19,24 @@ $(document).ready(function () {
               var logradouro = dados.logradouro + " - " + dados.bairro + ", " + dados.localidade + "/" + dados.uf;
               $("#inputAddress").val(logradouro);
             }
-
+            var erroCep = document.getElementById('erroCEP');
+            erroCep.hidden=true;
           } //end if.
           else {
-            alert("CEP não encontrado.");
+            var erro = "<div id='erroCEP' style='padding-top: 15px;'><div class='alert alert-danger'><p>CEP não encontrado.</p></div></div>";
+            $("#card_body").before(erro);
+            //alert("CEP não encontrado.");
             $("#inputCEP").val("");
             $("#inputAddress").val("");
+            $(document).ready(function(){
+              $("#inputCEP").focus();
+            });
           }
         });
       } else {
-        alert("CEP não encontrado.");
+        var erro = "<div id='erroCEP' style='padding-top: 15px;'><div class='alert alert-danger'><p>Há mais/menos de 8 digitos...</p></div></div>";
+        $("#card_body").before(erro);
+        //alert("Há mais de 8 digitos...");
         $("#inputCEP").val("");
         $("#inputAddress").val("");
         $(document).ready(function(){
@@ -47,6 +55,7 @@ $(document).ready(function () {
       validacaoEmail(this);
     }
     else {
+
     }
   });
 });
@@ -74,3 +83,42 @@ function validacaoEmail(field) {
 
   }
 }
+
+$(document).ready(function(){
+  $("#inputCpf").mask("000.000.000-00")
+  //$("#cnpj").mask("00.000.000/0000-00")
+  //$("#telefone").mask("(00) 0000-0000")
+  //$("#salario").mask("999.999.990,00", {reverse: true})
+  $("#inputCEP").mask("00000-000")
+  //$("#dataNascimento").mask("00/00/0000")
+
+  $("#inputRg").mask("999.999.999-W", {
+    translation: {
+      'W': {
+        pattern: /[X0-9]/
+      }
+    },
+    reverse: true
+  })
+
+  var options = {
+    translation: {
+      'A': {pattern: /[A-Z]/},
+      'a': {pattern: /[a-zA-Z]/},
+      'S': {pattern: /[a-zA-Z0-9]/},
+      'L': {pattern: /[a-z]/},
+    }
+  }
+
+  //$("#placa").mask("AAA-0000", options)
+  //$("#codigo").mask("AA.LLL.0000", options)
+  //$("#celular").mask("(00) 0000-00009")
+
+  $("#inputPhone").blur(function(event){
+    if ($(this).val().length === 15){
+      $("#inputPhone").mask("(00) 00000-0009")
+    }else{
+      $("#inputPhone").mask("(00) 0000-00009")
+    }
+  })
+})

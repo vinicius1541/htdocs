@@ -1,8 +1,8 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-auto col-md-auto col-lg-auto mx-auto">
-            <div class="fundoLogado card card-signin my-5">
-                <div class="card-body">
+            <div class="fundoLogado card card-signin my-2">
+                <div class="card-body" id="card_body">
                     <?php
                     if (isset($_SESSION['status_cadastro'])) :
                         ?>
@@ -32,13 +32,13 @@
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <div class="form-label-group">
-                                    <input name="cli_cpf" type="number" class="form-control" id="inputCpf" placeholder="CPF" autocomplete="off" required>
+                                    <input name="cli_cpf" type="text" class="form-control" id="inputCpf" placeholder="CPF" autocomplete="off" required>
                                     <label for="inputCpf">CPF</label>
                                 </div>
                             </div>
                             <div class="form-group col-md-6">
                                 <div class="form-label-group">
-                                    <input name="cli_rg" type="number" class="form-control" id="inputRg" placeholder="RG" autocomplete="off" required>
+                                    <input name="cli_rg" type="text" class="form-control" id="inputRg" placeholder="RG" autocomplete="off" required>
                                     <label for="inputRg">RG</label>
                                 </div>
                             </div>
@@ -46,13 +46,13 @@
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <div class="form-label-group">
-                                    <input name="cli_cep" type="number" class="form-control" id="inputCEP" placeholder="CEP" autocomplete="off" required>
+                                    <input name="cli_cep" type="text" class="form-control" id="inputCEP" placeholder="CEP" autocomplete="off" required>
                                     <label for="inputCEP">CEP</label>
                                 </div>
                             </div>
                             <div class="form-group col-md-6">
                                 <div class="form-label-group">
-                                    <input name="celular" type="number" class="form-control" id="inputPhone" placeholder="Celular" autocomplete="off" required>
+                                    <input name="celular" type="text" class="form-control" id="inputPhone" placeholder="Celular" autocomplete="off" required>
                                     <label for="inputPhone">Celular</label>
                                 </div>
                             </div>
