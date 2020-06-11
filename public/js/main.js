@@ -59,7 +59,9 @@ $(document).ready(function () {
     }
   });
 });
-
+/*function cleanError(){
+  document.getElementById("erroCEP").style.display = "none";
+}*/
 function validacaoEmail(field) {
   usuario = field.value.substring(0, field.value.indexOf("@"));
   dominio = field.value.substring(field.value.indexOf("@") + 1, field.value.length);

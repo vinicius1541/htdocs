@@ -14,7 +14,6 @@
             crossorigin="anonymous">
     </script>
     <script src="<?php echo DIRJS . 'jquery.mask.min.js' ?>"></script>
-    <script src="<?php echo DIRJS . 'bootstrap.min.js' ?>"></script>
-    <script src="<?php echo DIRJS . 'bootstrap.bundle.min.js'?>"></script>
+
 
     <title><?php echo $this->getTitle(); ?></title>
