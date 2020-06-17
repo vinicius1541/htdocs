@@ -23,9 +23,9 @@ $(document).ready(function () {
             erroCep.hidden=true;
           } //end if.
           else {
-            var erro = "<div id='erroCEP' style='padding-top: 15px;'><div class='alert alert-danger'><p>CEP não encontrado.</p></div></div>";
-            $("#card_body").before(erro);
-            //alert("CEP não encontrado.");
+            //var erro = "<div id='erroCEP' style='padding-top: 15px;'><div class='alert alert-danger'><p>CEP não encontrado.</p></div></div>";
+            //$("#card_body").before(erro);
+            alert("CEP não encontrado.");
             $("#inputCEP").val("");
             $("#inputAddress").val("");
             $(document).ready(function(){
@@ -34,9 +34,9 @@ $(document).ready(function () {
           }
         });
       } else {
-        var erro = "<div id='erroCEP' style='padding-top: 15px;'><div class='alert alert-danger'><p>Há mais/menos de 8 digitos...</p></div></div>";
-        $("#card_body").before(erro);
-        //alert("Há mais de 8 digitos...");
+        /*var erro = "<div id='erroCEP' style='padding-top: 15px;'><div class='alert alert-danger'><p>Há mais/menos de 8 digitos...</p></div></div>";
+        $("#card_body").before(erro);*/
+        alert("Há mais de 8 digitos...");
         $("#inputCEP").val("");
         $("#inputAddress").val("");
         $(document).ready(function(){
@@ -94,7 +94,7 @@ $(document).ready(function(){
   $("#inputCEP").mask("00000-000")
   //$("#dataNascimento").mask("00/00/0000")
 
-  $("#inputRg").mask("999.999.999-W", {
+  $("#inputRg").mask("99.999.999-W", {
     translation: {
       'W': {
         pattern: /[X0-9]/

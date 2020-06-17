@@ -57,21 +57,21 @@
                         </div>
                         <div class="form-group">
                             <div class="form-label-group">
-                                <input name="celular" type="number" class="form-control" id="inputPhone" placeholder="Celular" autocomplete="off" required>
+                                <input name="celular" type="text" class="form-control" id="inputPhone" placeholder="Celular" autocomplete="off" required>
                                 <label for="inputPhone">Celular</label>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <div class="form-label-group">
-                                    <input name="cpf" type="number" class="form-control" id="inputCpf" placeholder="CPF" autocomplete="off" required>
+                                    <input name="cpf" type="text" class="form-control" id="inputCpf" placeholder="CPF" autocomplete="off" required>
                                     <label for="inputCpf">CPF</label>
                                 </div>
                             </div>
 
                             <div class="form-group col-md-6">
                                 <div class="form-label-group">
-                                    <input name="rg" type="number" class="form-control" id="inputRg" placeholder="RG" autocomplete="off" required>
+                                    <input name="rg" type="text" class="form-control" id="inputRg" placeholder="RG" autocomplete="off" required>
                                     <label for="inputRg">RG</label>
                                 </div>
                             </div>
