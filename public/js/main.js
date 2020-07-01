@@ -19,8 +19,6 @@ $(document).ready(function () {
               var logradouro = dados.logradouro + " - " + dados.bairro + ", " + dados.localidade + "/" + dados.uf;
               $("#inputAddress").val(logradouro);
             }
-            var erroCep = document.getElementById('erroCEP');
-            erroCep.hidden=true;
           } //end if.
           else {
             //var erro = "<div id='erroCEP' style='padding-top: 15px;'><div class='alert alert-danger'><p>CEP não encontrado.</p></div></div>";
@@ -117,7 +115,7 @@ $(document).ready(function(){
   //$("#celular").mask("(00) 0000-00009")
 
   $("#inputPhone").blur(function(event){
-    if ($(this).val().length === 15){
+    if ($(this).val().length == 15){
       $("#inputPhone").mask("(00) 00000-0009")
     }else{
       $("#inputPhone").mask("(00) 0000-00009")

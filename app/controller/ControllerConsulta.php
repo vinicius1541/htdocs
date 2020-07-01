@@ -375,7 +375,7 @@ class ControllerConsulta extends ClassConsulta {
                     <div class="form-row">
                         <div class="col-auto my-1">
                             <select id="funcionario_id" name="funcionario_id" class="custom-select mr-sm-2" id="inlineFormCustomSelect">
-                                <option value="0" selected>Selecione o profissional</option>
+                                <option value="0" selected>Listar todas as consultas</option>
                                 <?php
                                 foreach ($funcioArray as $dadosFuncio){
                                     $funcSelecionado = $dadosFuncio['funcionario_id'] == $funcionario_id ? "selected" : "";

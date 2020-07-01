@@ -123,5 +123,15 @@ class ClassCliente extends ClassConexao{
             return false;
         endif;
     }
+    protected function verificarCliente($cliente_id){
+        $BFetch=$this->conexaoDB()->prepare("SELECT * FROM consultas WHERE cliente_id=:cliente_id");
+        $BFetch->bindParam(":cliente_id", $cliente_id, \PDO::PARAM_INT);
+        $BFetch->execute();
+        if($row = $BFetch->rowCount()>0){ # Se existir consulta desse cliente, retorna TRUE
+            return true;
+        }else{
+            return false;
+        }
+    }
 }
     

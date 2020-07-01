@@ -75,9 +75,9 @@ class ControllerCadastroFuncio extends ClassFuncionario{
     public function addFuncionario(){
         $this->recebeVariaveis();
 
-        $validar = $this->verificarCadastro($this->login,$this->funcionario_id, $this->funcao_id);
+        $validar = $this->verificarCadastro($this->login,$this->funcionario_id, $this->funcao_id, $this->cpf);
         if ($validar == true) { # Quer dizer que o cadastro já existe
-            $_SESSION['usuario_existe'] = true;
+            $_SESSION['erro'] = true;
         } else {
             $this->salvarFuncionario($this->nome, $this->cpf, $this->rg, $this->celular, $this->email, $this->endereco, $this->funcao_id, $this->nivelacesso_id);
             $this->usuario = new ClassUsuario();
@@ -428,14 +428,14 @@ class ControllerCadastroFuncio extends ClassFuncionario{
                             <div class='card-body'>";
                                 if (isset($_SESSION['sucesso'])) :
                                     echo "
-                                                    <div class='alert alert-success'>
-                                                        <p>" . $_SESSION['msg'] . "</p>
-                                                    </div>";
+                                            <div class='alert alert-success'>
+                                                <p>" . $_SESSION['msg'] . "</p>
+                                            </div>";
                                 elseif (isset($_SESSION['erro'])) :
                                     echo "
-                                                    <div class='alert alert-danger'>
-                                                        <p>" . $_SESSION['msg'] . "</p>
-                                                    </div>";
+                                            <div class='alert alert-danger'>
+                                                <p>" . $_SESSION['msg'] . "</p>
+                                            </div>";
                                 endif;
                                 unset($_SESSION['erro']);
                                 unset($_SESSION['sucesso']);
@@ -532,7 +532,7 @@ class ControllerCadastroFuncio extends ClassFuncionario{
 
     public function editar(){
         $this->recebeVariaveis();
-        $validar = $this->verificarCadastro($this->login, $this->funcionario_id, $this->funcao_id);
+        $validar = $this->verificarCadastro($this->login, $this->funcionario_id, $this->funcao_id, $this->cpf);
         if ($validar == true) { # Quer dizer que o cadastro já existe
             header('Location: ' . DIRPAGE . 'cadastro_funcio/editando/' . $this->funcionario_id);
             exit();

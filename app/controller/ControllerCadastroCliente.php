@@ -84,7 +84,7 @@ class ControllerCadastroCliente extends ClassCliente{
         <link href='" . DIRCSS . 'bootstrap.min.css' . "' rel='stylesheet'/>
         <link href='" . DIRCSS . 'style.css' . "' rel='stylesheet'/>
         <link href='" . DIRCSS . 'bootstrap.css' . "' rel='stylesheet'/>
-        <body class='fundoLogado'>";
+        <body class='fundo'>";
         if (isset($_SESSION['sucesso'])) :
             echo "
             <div class='alert alert-success'>
@@ -516,14 +516,20 @@ class ControllerCadastroCliente extends ClassCliente{
     }
     public function excluir($cliente_id){
         $this->recebeVariaveis();
-        $F = $this->excluirCliente($cliente_id);
-        if($F):
-            $_SESSION['sucesso'] = true;
-            $_SESSION['msg'] = "Cliente excluído com sucesso!";
-        else:
+        if(!($this->verificarCliente($cliente_id))) {
+            $F = $this->excluirCliente($cliente_id);
+            if ($F):
+                $_SESSION['sucesso'] = true;
+                $_SESSION['msg'] = "Cliente excluído com sucesso!";
+            else:
+                $_SESSION['erro'] = true;
+                $_SESSION['msg'] = "Sinto muito, ocorreu um erro ao tentar atualizar o funcionário :(";
+            endif;
+
+        }else{
             $_SESSION['erro'] = true;
-            $_SESSION['msg'] = "Sinto muito, ocorreu um erro ao tentar atualizar o funcionário :(";
-        endif;
+            $_SESSION['msg'] = "Cliente nao pode ser apagado pois o mesmo tem consultas marcadas, delete a consulta antes de exclui-lo!";
+        }
         header('Location: ' . DIRPAGE . 'cadastro_cliente/listar');
         exit();
     }

@@ -10,13 +10,12 @@
                             <p>Cadastro concluido com sucesso!</p>
                         </div>
                     <?php endif;
-                    if (isset($_SESSION['usuario_existe'])) :
+                    if (isset($_SESSION['erro'])) :
                         ?>
                         <div class='alert alert-danger'>
-                            <p>Usuario escolhido já existe. Informe outro e tente novamente.</p>
+                            <p><?php echo $_SESSION['msg']; ?></p>
                         </div>
                     <?php endif;
-                    unset($_SESSION['usuario_existe']);
                     unset($_SESSION['status_cadastro']);
                     unset($_SESSION['erro']);
                     unset($_SESSION['msg']);
