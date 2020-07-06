@@ -1,1 +1,2 @@
-htdocs
+- Projeto de uma clínica Odontológica usando PHP, MySQL, HTML, JavaScript, JQuery, BootStrap e CSS no seu desenvolvimento.
+- Este projeto foi desenvolvido no Projeto de Conclusao de Curso, no curso de Análise e Desenvolvimento de Sistemas.
