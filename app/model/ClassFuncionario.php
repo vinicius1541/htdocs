@@ -6,11 +6,11 @@ class ClassFuncionario extends ClassConexao{
 
     # Método que irá verificar se o cadastro já existe
     protected function verificarCadastro($login, $funcionario_id, $funcao_id, $cpf){
-        if($this->verificarCPF($funcionario_id, $cpf)){
+        /*if($this->verificarCPF($funcionario_id, $cpf)){
             $_SESSION['erro'] = true;
             $_SESSION['msg'] = "Já existe um CPF igual ao digitado, por favor, digite outro!";
             return true;
-        }
+        }*/
 
         if($this->verificarFuncionario($funcionario_id)){ # se retornar true(dizendo que o funcionario tem consultas marcadas
             if(!empty($funcao_id)){ # se o atributo funcao_id existir
@@ -197,7 +197,7 @@ class ClassFuncionario extends ClassConexao{
         }
     }
     protected function verificarCPF($funcionario_id, $cpf){
-        $BFetch=$this->conexaoDB()->prepare("SELECT *  FROM funcionarios WHERE funcionario_id=:funcionario_id or cpf=:cpf");
+        $BFetch=$this->conexaoDB()->prepare("SELECT *  FROM funcionarios WHERE cpf=:cpf and funcionario_id!=:funcionario_id");
         $BFetch->bindParam(":funcionario_id", $funcionario_id, \PDO::PARAM_INT);
         $BFetch->bindParam(":cpf", $cpf, \PDO::PARAM_STR);
 
